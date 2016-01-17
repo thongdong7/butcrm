@@ -15,20 +15,30 @@ var {
   TouchableHighlight,
   View,
 } = React;
+
 var CallHistoryAndroid = require('../../CallHistoryAndroid');
 
 var styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  itemContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    padding: 10
+  },
+  rightContainer: {
+    marginLeft: 10,
+  },
   toolbar: {
     backgroundColor: '#9999ff',
     height: 56,
   },
   listView: {
     paddingTop: 20,
-    backgroundColor: '#F5FCFF',
   },
   phone: {
     fontSize: 10,
-//    marginBottom: 8,
     textAlign: 'right',
   },
 });
@@ -37,9 +47,9 @@ var CallHistory = React.createClass({
   getInitialState: function() {
     return {
       dataSource: new ListView.DataSource({
-        rowHasChanged: (row1, row2) => row1 !== row2,
+        rowHasChanged: (row1, row2) => row1.phone !== row2.phone,
       }),
-      name: null,
+      loaded: false
     };
   },
   componentDidMount: function() {
@@ -47,31 +57,45 @@ var CallHistory = React.createClass({
       console.log(data);
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(data),
-        name: 'data'
+        loaded: true
       });
     });
   },
   render: function() {
+    var content = !this.state.loaded ? this._renderLoadingView() :
+      <ListView
+          dataSource={this.state.dataSource}
+          renderRow={this._renderCall}
+          style={styles.listView}
+          automaticallyAdjustContentInsets={false}
+          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps={true}
+          showsVerticalScrollIndicator={false}
+        />;
+
     return (
-      <View>
+      <View style={styles.container}>
         <ToolbarAndroid
-           title="Hello1"
-           style={styles.toolbar}
-           actions={[{title: 'Save', show: 'always'}]}
-           onActionSelected={this._goToWorld} />
-          <Text>Hello is me: {this.state.name}</Text>
-          <ListView
-            dataSource={this.state.dataSource}
-            renderRow={this.renderContact}
-            style={styles.listView}
-          />
+           title="Call History"
+           style={styles.toolbar} />
+        {content}
       </View>
     );
   },
-  renderContact: function(call) {
+
+  _renderLoadingView: function() {
+    return (
+      <View style={styles.container}>
+        <Text>
+          Loading contacts...
+        </Text>
+      </View>
+    );
+  },
+  _renderCall: function(call) {
     return (
       <TouchableHighlight>
-        <View style={styles.container}>
+        <View style={styles.itemContainer}>
           <View style={styles.rightContainer}>
             <Text style={styles.phone}>{call.phone}</Text>
             <Text style={styles.phone}>{call.type}</Text>

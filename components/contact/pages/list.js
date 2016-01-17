@@ -18,7 +18,7 @@ var {
 
 var contactService = require('../service.js');
 //var ContactCreate = require('./create.js');
-var Hello = require('./hello.js');
+// var Hello = require('./hello.js');
 
 var ContactList = React.createClass({
   getInitialState: function() {
@@ -33,9 +33,9 @@ var ContactList = React.createClass({
     this.fetchData();
   },
   fetchData: function() {
-    console.log('fetchData1');
+    // console.log('fetchData1');
     contactService.list().then((contacts) => {
-        console.log('contacts', contacts);
+        // console.log('contacts', contacts);
 
         this.setState({
           dataSource: this.state.dataSource.cloneWithRows(contacts),
@@ -44,28 +44,31 @@ var ContactList = React.createClass({
     }).done();
   },
   render: function() {
-    console.log('render list');
-    if (!this.state.loaded) {
-      return this.renderLoadingView();
-    }
+    console.log('render list1');
+    var content = !this.state.loaded ? this._renderLoadingView() :
+      <ListView
+          dataSource={this.state.dataSource}
+          renderRow={this._renderContact}
+          style={styles.listView}
+          automaticallyAdjustContentInsets={false}
+          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps={true}
+          showsVerticalScrollIndicator={false}
+        />;
 
     return (
-      <View>
+      <View style={styles.container}>
         <ToolbarAndroid
-         title="Contact List"
-         style={styles.toolbar}
-         actions={[{title: 'Add', show: 'always'}]}
-         onActionSelected={this.onActionSelected} />
-        <ListView
-          dataSource={this.state.dataSource}
-          renderRow={this.renderContact}
-          style={styles.listView}
-        />
+           title="Contact List"
+           style={styles.toolbar}
+           actions={[{title: 'Add', show: 'always'}]}
+           onActionSelected={this.onActionSelected} />
+        {content}
       </View>
     );
   },
 
-  renderLoadingView: function() {
+  _renderLoadingView: function() {
     return (
       <View style={styles.container}>
         <Text>
@@ -75,10 +78,10 @@ var ContactList = React.createClass({
     );
   },
 
-  renderContact: function(contact) {
+  _renderContact: function(contact) {
     return (
       <TouchableHighlight onPress={() => this.gotoContactCreate(contact)}>
-        <View style={styles.container}>
+        <View style={styles.itemContainer}>
           <View style={styles.rightContainer}>
             <Text style={styles.title}>{contact.name}</Text>
             <Text style={styles.phone}>{contact.phone}</Text>
@@ -105,6 +108,9 @@ var ContactList = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  itemContainer: {
+    flex: 1,
     flexDirection: 'row',
 //    justifyContent: 'center',
 //    alignItems: 'right',
@@ -112,6 +118,7 @@ var styles = StyleSheet.create({
   },
   rightContainer: {
 //    flex: 1,
+    padding: 10,
     marginLeft: 10,
   },
   toolbar: {
