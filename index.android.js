@@ -6,6 +6,8 @@
 
 var ContactCreate = require('./components/contact/pages/create.js');
 var ContactList = require('./components/contact/pages/list.js');
+var Hello = require('./components/contact/pages/hello.js');
+var World = require('./components/contact/pages/world.js');
 var React = require('react-native');
 var {
   AppRegistry,
@@ -25,13 +27,21 @@ BackAndroid.addEventListener('hardwareBackPress', () => {
 
 var RouteMapper = function(route, navigationOperations, onComponentRef) {
   _navigator = navigationOperations;
-  if (route.name === 'contact.create') {
+  if (route.name === 'hello') {
     return (
-      <ContactCreate navigator={navigationOperations} />
+      <Hello navigator={navigationOperations} route={route} />
+        );
+  } else if (route.name == 'world') {
+    return (
+      <World navigator={navigationOperations} route={route} />
+        );
+  } else if (route.name === 'contact.create') {
+    return (
+      <ContactCreate navigator={navigationOperations} route={route} />
     );
   } else if (route.name === 'contact.list') {
     return (
-      <ContactList navigator={navigationOperations} />
+      <ContactList navigator={navigationOperations} route={route} />
     );
   }
 };
@@ -43,7 +53,6 @@ var MoviesApp = React.createClass({
       <Navigator
         style={styles.container}
         initialRoute={initialRoute}
-        configureScene={() => Navigator.SceneConfigs.FadeAndroid}
         renderScene={RouteMapper}
       />
     );
@@ -53,7 +62,7 @@ var MoviesApp = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'blue',
   },
   toolbar: {
     backgroundColor: '#a9a9a9',

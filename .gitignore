@@ -27,6 +27,7 @@ project.xcworkspace
 .idea
 .gradle
 local.properties
+trace.html
 
 # node.js
 #

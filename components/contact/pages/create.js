@@ -30,13 +30,23 @@ var styles = StyleSheet.create({
 
 var ContactCreate = React.createClass({
   getInitialState: function() {
-    return {
+    let state = {
+      contact_id: undefined,
       name: null,
-    };
+      phone: null
+    }
+
+    let route = this.props.route;
+    if (route && route.contact) {
+      for (let f in route.contact) {
+        state[f] = route.contact[f];
+      }
+    }
+
+    return state;
   },
   render: function() {
-    console.log('props contact');
-    console.log('props contact', this.props);
+    console.log('render view');
     return (
       <View>
         <ToolbarAndroid
@@ -55,32 +65,37 @@ var ContactCreate = React.createClass({
         />
         <TextInput
           placeholder='Phone'
+          keyboardType='numeric'
           style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={(text) => this.setState({name: text})}
-          value={this.state.name}
+          onChangeText={(text) => this.setState({phone: text})}
+          value={this.state.phone}
         />
         </View>
       </View>
     );
   },
   onActionSelected: function(position) {
+    console.log('on action selected');
     if (position === 0) { // index of 'Settings'
       this.save();
     }
   },
   save: function() {
-    if (this.state.name) {
-      contactService.create({name: this.state.name}).then(() => {
+    // if (this.state.name) {
+      // this.gotoContactList();
+      contactService.create(this.state).then(() => {
         // Go to ContactList page
         this.gotoContactList();
       });
-    }
+    // }
   },
   gotoContactList: function() {
-    console.log('go to contact list');
+    console.log('go to contact list1');
+    // this.props.navigator.pop();
     this.props.navigator.push({
         title: "Contacts",
         name: 'contact.list',
+        // name: 'hello',
       });
   }
 });

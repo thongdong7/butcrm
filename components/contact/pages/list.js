@@ -11,19 +11,20 @@ var {
   ListView,
   StyleSheet,
   Text,
+  ToolbarAndroid,
   TouchableHighlight,
   View,
 } = React;
 
 var contactService = require('../service.js');
-var ContactCreate = require('./create.js');
+//var ContactCreate = require('./create.js');
 var Hello = require('./hello.js');
 
 var ContactList = React.createClass({
   getInitialState: function() {
     return {
       dataSource: new ListView.DataSource({
-        rowHasChanged: (row1, row2) => row1 !== row2,
+        rowHasChanged: (row1, row2) => row1.contact_id !== row2.contact_id,
       }),
       loaded: false,
     };
@@ -43,16 +44,24 @@ var ContactList = React.createClass({
     }).done();
   },
   render: function() {
+    console.log('render list');
     if (!this.state.loaded) {
       return this.renderLoadingView();
     }
 
     return (
-      <ListView
-        dataSource={this.state.dataSource}
-        renderRow={this.renderContact}
-        style={styles.listView}
-      />
+      <View>
+        <ToolbarAndroid
+         title="Contact List"
+         style={styles.toolbar}
+         actions={[{title: 'Add', show: 'always'}]}
+         onActionSelected={this.onActionSelected} />
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={this.renderContact}
+          style={styles.listView}
+        />
+      </View>
     );
   },
 
@@ -80,10 +89,15 @@ var ContactList = React.createClass({
   gotoContactCreate: function(contact) {
     console.log(`contact clicked `, contact);
     this.props.navigator.push({
-        title: contact.name,
-        component: 'contact.create',
-        // contact: contact,
+        name: 'contact.create',
+        contact: contact,
       });
+  },
+  onActionSelected: function(position) {
+    console.log('on list action selected');
+    if (position === 0) { // index of 'Settings'
+      this.gotoContactCreate();
+    }
   },
 });
 
@@ -98,6 +112,10 @@ var styles = StyleSheet.create({
   rightContainer: {
   flex: 1,
 },
+  toolbar: {
+    backgroundColor: '#9999ff',
+    height: 56,
+  },
   listView: {
     paddingTop: 20,
     backgroundColor: '#F5FCFF',

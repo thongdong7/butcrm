@@ -18,7 +18,7 @@ var {
 } = React;
 
 var SQLite = require('react-native-sqlite-storage');
-SQLite.DEBUG(true);
+SQLite.DEBUG(false);
 SQLite.enablePromise(true);
 var database_name = "Test.db";
 var database_version = "1.0";
@@ -42,15 +42,15 @@ var p = SQLite.openDatabase(database_name, database_version, database_displaynam
 var schema = [
     "CREATE TABLE contact("
         + "contact_id INTEGER PRIMARY KEY AUTOINCREMENT,"
-        + "name VARCHAR(255) NOT NULL"
+        + "name VARCHAR(255) NOT NULL,"
+        + "phone VARCHAR(255) NOT NULL,"
+        + "note TEXT"
     + ");",
 
-    "INSERT INTO contact(name) VALUES('A Hung');",
-    "INSERT INTO contact(name) VALUES('C Mai');",
-    "INSERT INTO contact(name) VALUES('C Mai');",
-    "INSERT INTO contact(name) VALUES('C Mai');",
-    "INSERT INTO contact(name) VALUES('C Mai');",
-    "INSERT INTO contact(name) VALUES('C Mai');",
+    "INSERT INTO contact(name, phone) VALUES('A Hung', '123456789');",
+    "INSERT INTO contact(name, phone) VALUES('C Mai', '123456789');",
+    "INSERT INTO contact(name, phone) VALUES('A Quy', '123456789');",
+    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
 ];
 
 function executeSql(sqls) {
