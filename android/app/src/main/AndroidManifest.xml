@@ -2,6 +2,7 @@
     package="com.butcrm">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
 
     <application
       android:allowBackup="true"
