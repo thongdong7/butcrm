@@ -33,7 +33,7 @@ var ContactList = React.createClass({
     this.fetchData();
   },
   fetchData: function() {
-    console.log('fetchData');
+    console.log('fetchData1');
     contactService.list().then((contacts) => {
         console.log('contacts', contacts);
 
@@ -81,6 +81,7 @@ var ContactList = React.createClass({
         <View style={styles.container}>
           <View style={styles.rightContainer}>
             <Text style={styles.title}>{contact.name}</Text>
+            <Text style={styles.phone}>{contact.phone}</Text>
           </View>
         </View>
       </TouchableHighlight>
@@ -94,7 +95,7 @@ var ContactList = React.createClass({
       });
   },
   onActionSelected: function(position) {
-    console.log('on list action selected');
+    console.log('on list action selected1');
     if (position === 0) { // index of 'Settings'
       this.gotoContactCreate();
     }
@@ -105,13 +106,14 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+//    justifyContent: 'center',
+//    alignItems: 'right',
+//    backgroundColor: '#F5FCFF',
   },
   rightContainer: {
-  flex: 1,
-},
+//    flex: 1,
+    marginLeft: 10,
+  },
   toolbar: {
     backgroundColor: '#9999ff',
     height: 56,
@@ -126,8 +128,13 @@ var styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    marginBottom: 8,
-    textAlign: 'center',
+//    marginBottom: 8,
+    textAlign: 'right',
+  },
+  phone: {
+    fontSize: 10,
+//    marginBottom: 8,
+    textAlign: 'right',
   },
   year: {
     textAlign: 'center',
