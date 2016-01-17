@@ -11,6 +11,7 @@ var {
   ListView,
   StyleSheet,
   ScrollView,
+  ToastAndroid,
   Text,
   TextInput,
   ToolbarAndroid,
@@ -84,6 +85,14 @@ var ContactCreate = React.createClass({
     if (this.state.name) {
       dismissKeyboard();
       contactService.create(this.state).then(() => {
+        let msg;
+        if (this.state.contact_id) {
+          msg = `Updated ${this.state.name}`;
+        } else {
+          msg = `Added ${this.state.name} to list`;
+        }
+
+        ToastAndroid.show(msg, ToastAndroid.SHORT);
         // Go to ContactList page
         this.gotoContactList();
       });
