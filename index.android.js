@@ -6,6 +6,7 @@
 
 var ContactCreate = require('./components/contact/pages/create.js');
 var ContactList = require('./components/contact/pages/list.js');
+var CallHistory = require('./components/contact/pages/history.js');
 var Hello = require('./components/contact/pages/hello.js');
 var World = require('./components/contact/pages/world.js');
 var React = require('react-native');
@@ -43,12 +44,16 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
     return (
       <ContactList navigator={navigationOperations} route={route} />
     );
+  } else if (route.name === 'contact.history') {
+    return (
+      <CallHistory navigator={navigationOperations} route={route} />
+    );
   }
 };
 
 var MoviesApp = React.createClass({
   render: function() {
-    var initialRoute = {name: 'contact.list'};
+    var initialRoute = {name: 'contact.history'};
     return (
       <Navigator
         style={styles.container}
