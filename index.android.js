@@ -62,7 +62,7 @@ var MoviesApp = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'blue',
+    backgroundColor: 'white',
   },
   toolbar: {
     backgroundColor: '#a9a9a9',
