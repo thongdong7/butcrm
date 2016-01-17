@@ -18,7 +18,7 @@ var {
 } = React;
 
 var ContactList = require('./list.js');
-
+var dismissKeyboard = require('dismissKeyboard');
 var contactService = require("../service.js");
 
 var styles = StyleSheet.create({
@@ -81,13 +81,13 @@ var ContactCreate = React.createClass({
     }
   },
   save: function() {
-    // if (this.state.name) {
-      // this.gotoContactList();
+    if (this.state.name) {
+      dismissKeyboard();
       contactService.create(this.state).then(() => {
         // Go to ContactList page
         this.gotoContactList();
       });
-    // }
+     }
   },
   gotoContactList: function() {
     console.log('go to contact list1');
