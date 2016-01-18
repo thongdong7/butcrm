@@ -32,18 +32,20 @@ public class CallHistoryModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void getAll(Callback successCallback) {
+    public void getAll(int limit, Callback successCallback) {
         StringBuffer sb = new StringBuffer();
         Cursor managedCursor = activity.managedQuery(CallLog.Calls.CONTENT_URI, null,
-                null, null, null);
+                null, null, CallLog.Calls.DATE + " DESC LIMIT "+limit);
         int number = managedCursor.getColumnIndex(CallLog.Calls.NUMBER);
         int type = managedCursor.getColumnIndex(CallLog.Calls.TYPE);
         int date = managedCursor.getColumnIndex(CallLog.Calls.DATE);
         int duration = managedCursor.getColumnIndex(CallLog.Calls.DURATION);
+        int cacheNameCol = managedCursor.getColumnIndex(CallLog.Calls.CACHED_NAME);
         sb.append("Call Log :");
         WritableArray data = Arguments.createArray();
 
         while (managedCursor.moveToNext()) {
+            String cacheName = managedCursor.getString(cacheNameCol);
             String phNumber = managedCursor.getString(number);
             String callType = managedCursor.getString(type);
             String callDate = managedCursor.getString(date);
@@ -66,6 +68,7 @@ public class CallHistoryModule extends ReactContextBaseJavaModule {
                     break;
             }
 
+            call.putString("cache_name", cacheName);
             call.putString("phone", phNumber);
             call.putString("type", dir);
             call.putString("date", callDayTime.toString());

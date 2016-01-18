@@ -43,6 +43,9 @@ var styles = StyleSheet.create({
   },
 });
 
+// Only show last 20 calls
+var limit = 20;
+
 var CallHistory = React.createClass({
   getInitialState: function() {
     return {
@@ -53,7 +56,7 @@ var CallHistory = React.createClass({
     };
   },
   componentDidMount: function() {
-    CallHistoryAndroid.getAll((data) => {
+    CallHistoryAndroid.getAll(limit, (data) => {
       console.log(data);
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(data),
@@ -87,7 +90,7 @@ var CallHistory = React.createClass({
     return (
       <View style={styles.container}>
         <Text>
-          Loading contacts...
+          Loading...
         </Text>
       </View>
     );
@@ -97,6 +100,8 @@ var CallHistory = React.createClass({
       <TouchableHighlight>
         <View style={styles.itemContainer}>
           <View style={styles.rightContainer}>
+            <Text style={styles.phone}>{call.cache_name}</Text>
+            <Text style={styles.phone}>{call.date}</Text>
             <Text style={styles.phone}>{call.phone}</Text>
             <Text style={styles.phone}>{call.type}</Text>
           </View>
