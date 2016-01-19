@@ -8,6 +8,7 @@
   "dependencies": {
     "fbemitter": "^2.0.1",
     "gb-native-router": "^0.6.0",
+    "moment": "^2.11.1",
     "react-native": "^0.17.0",
     "react-native-sqlite-storage": "^2.1.3"
   }

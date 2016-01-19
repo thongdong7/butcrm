@@ -17,6 +17,7 @@ var {
 } = React;
 
 var CallHistoryAndroid = require('../../CallHistoryAndroid');
+var moment = require('moment');
 
 var styles = StyleSheet.create({
   container: {
@@ -38,6 +39,14 @@ var styles = StyleSheet.create({
     paddingTop: 20,
   },
   phone: {
+    fontSize: 20,
+    textAlign: 'right',
+  },
+  callDate: {
+    fontSize: 10,
+    textAlign: 'right',
+  },
+  callType: {
     fontSize: 10,
     textAlign: 'right',
   },
@@ -56,7 +65,7 @@ var CallHistory = React.createClass({
     };
   },
   componentDidMount: function() {
-    CallHistoryAndroid.getAll(limit, (data) => {
+    CallHistoryAndroid.getUnknownCalls(limit, (data) => {
       console.log(data);
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(data),
@@ -100,10 +109,9 @@ var CallHistory = React.createClass({
       <TouchableHighlight>
         <View style={styles.itemContainer}>
           <View style={styles.rightContainer}>
-            <Text style={styles.phone}>{call.cache_name}</Text>
-            <Text style={styles.phone}>{call.date}</Text>
-            <Text style={styles.phone}>{call.phone}</Text>
-            <Text style={styles.phone}>{call.type}</Text>
+            <Text style={styles.phone}>{call.phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3')}</Text>
+            <Text style={styles.callDate}>{moment(call.date).fromNow()}</Text>
+            <Text style={styles.callType}>{call.type}</Text>
           </View>
         </View>
       </TouchableHighlight>
