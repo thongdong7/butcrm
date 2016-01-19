@@ -106,17 +106,27 @@ var CallHistory = React.createClass({
   },
   _renderCall: function(call) {
     return (
-      <TouchableHighlight>
+      <TouchableHighlight
+        onPress={() => this._onCallSelected(call)}>
         <View style={styles.itemContainer}>
           <View style={styles.rightContainer}>
             <Text style={styles.phone}>{call.phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3')}</Text>
             <Text style={styles.callDate}>{moment(call.date).fromNow()}</Text>
             <Text style={styles.callType}>{call.type}</Text>
+
           </View>
         </View>
       </TouchableHighlight>
     );
   },
+  _onCallSelected: function(call) {
+    this.props.navigator.push({
+      name: 'contact.create',
+      contact: {
+        phone: call.phone
+      }
+    })
+  }
 });
 
 module.exports = CallHistory;
