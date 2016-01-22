@@ -17,6 +17,7 @@ var {
 } = React;
 
 var CallHistoryAndroid = require('../../CallHistoryAndroid');
+var contactService = require('../service.js');
 var moment = require('moment');
 
 var styles = StyleSheet.create({
@@ -67,9 +68,29 @@ var CallHistory = React.createClass({
   componentDidMount: function() {
     CallHistoryAndroid.getUnknownCalls(limit, (data) => {
       console.log(data);
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(data),
-        loaded: true
+
+      // Get contacts base on this phones
+      let phones = [];
+      for (let i in data) {
+        phones.push(data[i].phone);
+      }
+
+      contactService.getByPhones(phones).then((phoneMap) => {
+        console.log('phone map', phoneMap)
+        for (let i in data) {
+          let phone = data[i].phone;
+          if (phoneMap[phone]) {
+            data[i].name = phoneMap[phone].name
+          }
+        }
+
+        return data;
+      }).then((data) => {
+        console.log('apply phone map', data);
+        this.setState({
+          dataSource: this.state.dataSource.cloneWithRows(data),
+          loaded: true
+        });
       });
     });
   },

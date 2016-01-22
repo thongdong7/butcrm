@@ -59,6 +59,31 @@ function list() {
     });
 }
 
+function getByPhones(phones) {
+    // return Promise.resolve([{contact_id: 1, name: "A", phone: "123"}, {contact_id: 2, name: "b", phone: "123"}, {contact_id: 3, name: "c", phone: "123"}]);
+    var tmp = [];
+    for (let i in phones) {
+        tmp.push("?")
+    }
+
+    var sql = "SELECT * FROM contact WHERE phone IN ("+tmp.join(",")+")";
+    return ready().then(() => {
+        return getDb().executeSql(sql, phones).then(([results]) => {
+            if (results.rows == undefined) {
+                return {};
+            }
+
+            let ret = {};
+            for (let i=0;i<results.rows.length; i++) {
+                let contact = results.rows.item(i);
+                ret[contact.contact_id] = contact;
+            }
+
+            return ret;
+        });
+    });
+}
+
 let isReady = false;
 
 function ready() {
@@ -76,4 +101,5 @@ module.exports = {
     ready: ready,
     create: createContact,
     list: list,
+    getByPhones: getByPhones
 };
