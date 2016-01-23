@@ -17,6 +17,8 @@ var {
   View,
 } = React;
 
+var eventManager = require('../event/index.js');
+
 var SQLite = require('react-native-sqlite-storage');
 SQLite.DEBUG(false);
 SQLite.enablePromise(true);
@@ -34,6 +36,7 @@ function errorCB(err) {
     return false;
 }
 var db;
+var ready = false;
 
 var p = SQLite.openDatabase(database_name, database_version, database_displayname, database_size, openCB, errorCB).then((DB) => {
     db = DB;
@@ -103,19 +106,27 @@ function executeSql(sqls) {
 
 function createDatabase() {
     // Get the version
-    var p =
+    var p = Promise.resolve().
 
-    executeSql([
-        "DROP TABLE IF EXISTS version;",
-        "DROP TABLE IF EXISTS contact;",
-    ]).
+    // executeSql([
+    //     "DROP TABLE IF EXISTS version;",
+    //     "DROP TABLE IF EXISTS contact;",
+    // ]).
 
     then(getVersion).then((version) => {
         console.log("aha, a version", version);
         return migrate(version);
+    }).then(() => {
+        console.log('migrate completed');
+        eventManager.notify('db.ready', db);
+        ready = true;
     });
 
     return p;
+}
+
+function isReady() {
+    return ready;
 }
 
 function getVersion() {
@@ -149,6 +160,11 @@ function migrate(startVersion) {
             });
         }
     }
+    console.log('abc');
+
+    if (sequence == undefined) {
+        sequence = Promise.resolve();
+    }
 
     return sequence.then(() => {
         console.log("Migrate completed. Know update the version");
@@ -169,6 +185,7 @@ function getDb() {
 }
 
 module.exports = {
+    isReady: isReady,
     dbPromise: p,
     db: db,
     getDb: getDb
