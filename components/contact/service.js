@@ -2,7 +2,7 @@ var {isReady, dbPromise, getDb} = require("../db/index.js");
 
 let isServiceReady = false;
 
-var emitter = require('../event/index.js');
+var emitter = require('../event');
 emitter.addListener('db.ready', (db) => {
     isServiceReady = true;
     emitter.emit('contact.service.ready');

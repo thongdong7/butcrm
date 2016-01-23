@@ -17,7 +17,7 @@ var {
   View,
 } = React;
 
-var emitter = require('../event/index.js');
+var emitter = require('../event');
 
 var SQLite = require('react-native-sqlite-storage');
 SQLite.DEBUG(false);

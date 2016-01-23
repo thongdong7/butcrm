@@ -17,7 +17,7 @@ var {
   View,
 } = React;
 
-var emitter = require('../../event/index.js');
+var emitter = require('../../event');
 
 var CallHistoryAndroid = require('../../CallHistoryAndroid');
 var contactService = require('../service.js');
