@@ -18,9 +18,9 @@ var {
   View,
 } = React;
 
-var ContactList = require('./list.js');
+var ContactList = require('./list');
 var dismissKeyboard = require('dismissKeyboard');
-var contactService = require("../service.js");
+var contactService = require("../service");
 
 var styles = StyleSheet.create({
   toolbar: {

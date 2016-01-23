@@ -20,7 +20,7 @@ var {
 var emitter = require('../../event');
 
 var CallHistoryAndroid = require('../../CallHistoryAndroid');
-var contactService = require('../service.js');
+var contactService = require('../service');
 var moment = require('moment');
 
 var styles = StyleSheet.create({

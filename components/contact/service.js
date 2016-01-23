@@ -1,4 +1,4 @@
-var {isReady, dbPromise, getDb} = require("../db/index.js");
+var {isReady, dbPromise, getDb} = require("../db");
 
 let isServiceReady = false;
 

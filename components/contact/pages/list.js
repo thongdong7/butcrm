@@ -16,7 +16,7 @@ var {
   View,
 } = React;
 
-var contactService = require('../service.js');
+var contactService = require('../service');
 //var ContactCreate = require('./create.js');
 // var Hello = require('./hello.js');
 
