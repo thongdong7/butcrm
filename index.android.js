@@ -51,8 +51,8 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
   }
 };
 
-var MoviesApp = React.createClass({
-  render: function() {
+class ButCRMApp extends React.Component {
+  render() {
     var initialRoute = {name: 'contact.history'};
     return (
       <Navigator
@@ -62,7 +62,7 @@ var MoviesApp = React.createClass({
       />
     );
   }
-});
+}
 
 var styles = StyleSheet.create({
   container: {
@@ -75,4 +75,4 @@ var styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent('butCRM', () => MoviesApp);
+AppRegistry.registerComponent('butCRM', () => ButCRMApp);
