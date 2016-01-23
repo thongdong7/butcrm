@@ -17,7 +17,8 @@ var {
   View,
 } = React;
 
-var eventManager = require('../../event/index.js');
+var emitter = require('../../event/index.js');
+
 var CallHistoryAndroid = require('../../CallHistoryAndroid');
 var contactService = require('../service.js');
 var moment = require('moment');
@@ -68,7 +69,7 @@ var CallHistory = React.createClass({
     };
   },
   componentDidMount: function() {
-    eventManager.register('contact.service.ready', this._fetchData);
+    emitter.addListener('contact.service.ready', this._fetchData);
 
     this._fetchData();
   },

@@ -17,7 +17,7 @@ var {
   View,
 } = React;
 
-var eventManager = require('../event/index.js');
+var emitter = require('../event/index.js');
 
 var SQLite = require('react-native-sqlite-storage');
 SQLite.DEBUG(false);
@@ -118,7 +118,7 @@ function createDatabase() {
         return migrate(version);
     }).then(() => {
         console.log('migrate completed');
-        eventManager.notify('db.ready', db);
+        emitter.emit('db.ready', db);
         ready = true;
     });
 

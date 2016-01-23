@@ -2,10 +2,10 @@ var {isReady, dbPromise, getDb} = require("../db/index.js");
 
 let isServiceReady = false;
 
-var eventManager = require('../event/index.js');
-eventManager.register('db.ready', (db) => {
+var emitter = require('../event/index.js');
+emitter.addListener('db.ready', (db) => {
     isServiceReady = true;
-    eventManager.notify('contact.service.ready', true);
+    emitter.emit('contact.service.ready');
 });
 
 function createContact(contact) {
