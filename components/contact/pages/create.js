@@ -93,19 +93,19 @@ var ContactCreate = React.createClass({
         }
 
         ToastAndroid.show(msg, ToastAndroid.SHORT);
-        // Go to ContactList page
-        this.gotoContactList();
+        // close this page page
+        this._closePage();
       });
      }
   },
-  gotoContactList: function() {
+  _closePage: function() {
     console.log('go to contact list1');
-    // this.props.navigator.pop();
-    this.props.navigator.push({
-        title: "Contacts",
-        name: 'contact.list',
-        // name: 'hello',
-      });
+     this.props.navigator.pop();
+//    this.props.navigator.push({
+//        title: "Contacts",
+//        name: 'contact.list',
+//        // name: 'hello',
+//      });
   }
 });
 

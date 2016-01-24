@@ -27,7 +27,7 @@ var ContactList = React.createClass({
   getInitialState: function() {
     return {
       dataSource: new ListView.DataSource({
-        rowHasChanged: (row1, row2) => row1.contact_id !== row2.contact_id,
+        rowHasChanged: (row1, row2) => row1 !== row2,
       }),
       isRefreshing: false,
       loaded: false,
@@ -42,17 +42,17 @@ var ContactList = React.createClass({
     // console.log('fetchData1');
     this.setState({isRefreshing: true})
     contactService.list().then((contacts) => {
-        // console.log('contacts', contacts);
+        console.log('contacts', contacts);
         this.setState({
           dataSource: this.state.dataSource.cloneWithRows(contacts),
           isRefreshing: false,
           loaded: true,
         });
-         console.log('fetch data completed');
+        console.log('fetch data and set state completed', this.state.dataSource);
     }).done();
   },
   render: function() {
-    console.log('render list3');
+    console.log('render list3', this.state.dataSource);
     var content = !this.state.loaded ? this._renderLoadingView() :
       <PullToRefreshViewAndroid
         style={styles.layout}
@@ -63,7 +63,7 @@ var ContactList = React.createClass({
             dataSource={this.state.dataSource}
             renderRow={this._renderContact}
             style={styles.listView}
-            automaticallyAdjustContentInsets={false}
+            automaticallyAdjustContentInsets={true}
             keyboardDismissMode="on-drag"
             keyboardShouldPersistTaps={true}
             showsVerticalScrollIndicator={false}
