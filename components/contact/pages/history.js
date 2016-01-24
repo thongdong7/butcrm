@@ -9,6 +9,7 @@ var {
   AppRegistry,
   Image,
   ListView,
+  PullToRefreshViewAndroid,
   StyleSheet,
   Text,
   ToastAndroid,
@@ -26,6 +27,9 @@ var moment = require('moment');
 var styles = StyleSheet.create({
   container: {
     flex: 1
+  },
+  layout: {
+    flex: 1,
   },
   itemContainer: {
     flex: 1,
@@ -65,6 +69,7 @@ var CallHistory = React.createClass({
       dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1.phone !== row2.phone,
       }),
+      isRefreshing: false,
       loaded: false
     };
   },
@@ -75,25 +80,21 @@ var CallHistory = React.createClass({
   },
   _fetchData: function() {
     if (!contactService.isReady()) {
-      console.log('contact service is not ready');
+//      console.log('contact service is not ready');
       return;
     }
 
-    console.log('fetch data');
-    // ToastAndroid.show("fetch data", ToastAndroid.SHORT);
+//    console.log('fetch data');
 
     CallHistoryAndroid.getUnknownCalls(limit, (data) => {
       // Get contacts base on this phones
-      // ToastAndroid.show("have unknown call", ToastAndroid.SHORT);
       let phones = [];
       for (let i in data) {
         phones.push(data[i].phone);
       }
 
-      // ToastAndroid.show("load our contact by phones, "+phones[0], ToastAndroid.SHORT);
       contactService.getByPhones(phones).then((phoneMap) => {
-        console.log('phone map2', phoneMap)
-        // ToastAndroid.show("merge with contact", ToastAndroid.SHORT);
+//        console.log('phone map2', phoneMap)
         for (let i in data) {
           let phone = data[i].phone;
           if (phoneMap[phone] != undefined) {
@@ -101,36 +102,42 @@ var CallHistory = React.createClass({
             data[i].contact = phoneMap[phone];
           }
         }
-        // ToastAndroid.show("merge with contact2", ToastAndroid.SHORT);
 
         return data;
       }).then((data) => {
-        // ToastAndroid.show("apply phone map", ToastAndroid.SHORT);
-        console.log('apply phone map', data);
+//        console.log('apply phone map', data);
         this.setState({
           dataSource: this.state.dataSource.cloneWithRows(data),
           loaded: true
         });
+
+       console.log('fetch data completed');
       });
     });
   },
   render: function() {
     var content = !this.state.loaded ? this._renderLoadingView() :
-      <ListView
-          dataSource={this.state.dataSource}
-          renderRow={this._renderCall}
-          style={styles.listView}
-          automaticallyAdjustContentInsets={false}
-          keyboardDismissMode="on-drag"
-          keyboardShouldPersistTaps={true}
-          showsVerticalScrollIndicator={false}
-        />;
+      <PullToRefreshViewAndroid
+        style={styles.layout}
+        refreshing={this.state.isRefreshing}
+        onRefresh={this._fetchData}
+        >
+        <ListView
+            dataSource={this.state.dataSource}
+            renderRow={this._renderCall}
+            style={styles.listView}
+            automaticallyAdjustContentInsets={false}
+            keyboardDismissMode="on-drag"
+            keyboardShouldPersistTaps={true}
+            showsVerticalScrollIndicator={false}
+          />
+      </PullToRefreshViewAndroid>;
 
     return (
       <View style={styles.container}>
         <ToolbarAndroid
           title="Call History"
-          actions={[{title: 'Refresh', show: 'always'}]}
+          // actions={[{title: 'Refresh', show: 'always'}]}
           onActionSelected={this._onActionSelected}
           style={styles.toolbar} />
         {content}
