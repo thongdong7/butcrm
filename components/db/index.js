@@ -160,7 +160,6 @@ function migrate(startVersion) {
             });
         }
     }
-    console.log('abc');
 
     if (sequence == undefined) {
         sequence = Promise.resolve();

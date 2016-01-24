@@ -42,17 +42,17 @@ var ContactList = React.createClass({
     // console.log('fetchData1');
     this.setState({isRefreshing: true})
     contactService.list().then((contacts) => {
-        console.log('contacts', contacts);
+        // console.log('contacts', contacts);
         this.setState({
           dataSource: this.state.dataSource.cloneWithRows(contacts),
           isRefreshing: false,
           loaded: true,
         });
-        console.log('fetch data and set state completed', this.state.dataSource);
+        // console.log('fetch data and set state completed');
     }).done();
   },
   render: function() {
-    console.log('render list3', this.state.dataSource);
+    // console.log('render list3');
     var content = !this.state.loaded ? this._renderLoadingView() :
       <PullToRefreshViewAndroid
         style={styles.layout}
@@ -63,7 +63,7 @@ var ContactList = React.createClass({
             dataSource={this.state.dataSource}
             renderRow={this._renderContact}
             style={styles.listView}
-            automaticallyAdjustContentInsets={true}
+            automaticallyAdjustContentInsets={false}
             keyboardDismissMode="on-drag"
             keyboardShouldPersistTaps={true}
             showsVerticalScrollIndicator={false}
@@ -108,10 +108,15 @@ var ContactList = React.createClass({
     this.props.navigator.push({
         name: 'contact.create',
         contact: contact,
+        callback: this._createContactCallback
       });
   },
+  _createContactCallback: function() {
+    // console.log('create contact callback');
+    this._fetchData();
+  },
   onActionSelected: function(position) {
-    console.log('on list action selected1');
+    // console.log('on list action selected1');
     if (position === 0) { // index of 'Settings'
       this.gotoContactCreate();
     }

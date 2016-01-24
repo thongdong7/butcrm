@@ -47,7 +47,6 @@ var ContactCreate = React.createClass({
     return state;
   },
   render: function() {
-    console.log('render view');
     return (
       <View>
         <ToolbarAndroid
@@ -76,7 +75,7 @@ var ContactCreate = React.createClass({
     );
   },
   onActionSelected: function(position) {
-    console.log('on action selected');
+    // console.log('on action selected');
     if (position === 0) { // index of 'Settings'
       this.save();
     }
@@ -100,7 +99,11 @@ var ContactCreate = React.createClass({
   },
   _closePage: function() {
     console.log('go to contact list1');
-     this.props.navigator.pop();
+    if (this.props.route && this.props.route.callback) {
+      this.props.route.callback();
+    }
+
+    this.props.navigator.pop();
 //    this.props.navigator.push({
 //        title: "Contacts",
 //        name: 'contact.list',
