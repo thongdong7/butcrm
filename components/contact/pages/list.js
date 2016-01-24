@@ -130,7 +130,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
   },
   rightContainer: {
-    padding: 10,
+    paddingTop: 5,
     marginLeft: 10,
   },
   toolbar: {
@@ -138,8 +138,8 @@ var styles = StyleSheet.create({
     height: 56,
   },
   listView: {
-    paddingTop: 20,
-    backgroundColor: '#F5FCFF',
+//    paddingTop: 20,
+//    backgroundColor: '#F5FCFF',
   },
   thumbnail: {
     width: 53,
