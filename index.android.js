@@ -53,7 +53,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 
 class ButCRMApp extends React.Component {
   render() {
-    var initialRoute = {name: 'contact.list'};
+    var initialRoute = {name: 'contact.history'};
     return (
       <Navigator
         style={styles.container}

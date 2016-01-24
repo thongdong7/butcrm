@@ -34,7 +34,7 @@ var styles = StyleSheet.create({
   itemContainer: {
     flex: 1,
     flexDirection: 'row',
-    padding: 10
+    paddingTop: 5
   },
   rightContainer: {
     marginLeft: 10,
@@ -44,7 +44,7 @@ var styles = StyleSheet.create({
     height: 56,
   },
   listView: {
-    paddingTop: 20,
+    // paddingTop: 20,
   },
   phone: {
     fontSize: 20,
@@ -67,7 +67,7 @@ var CallHistory = React.createClass({
   getInitialState: function() {
     return {
       dataSource: new ListView.DataSource({
-        rowHasChanged: (row1, row2) => row1.phone !== row2.phone,
+        rowHasChanged: (row1, row2) => row1 !== row2,
       }),
       isRefreshing: false,
       loaded: false
@@ -79,6 +79,9 @@ var CallHistory = React.createClass({
     this._fetchData();
   },
   _fetchData: function() {
+    this.setState({
+      isRefreshing: true
+    })
     if (!contactService.isReady()) {
 //      console.log('contact service is not ready');
       return;
@@ -94,7 +97,7 @@ var CallHistory = React.createClass({
       }
 
       contactService.getByPhones(phones).then((phoneMap) => {
-//        console.log('phone map2', phoneMap)
+       console.log('phone map2', phoneMap)
         for (let i in data) {
           let phone = data[i].phone;
           if (phoneMap[phone] != undefined) {
@@ -108,14 +111,16 @@ var CallHistory = React.createClass({
 //        console.log('apply phone map', data);
         this.setState({
           dataSource: this.state.dataSource.cloneWithRows(data),
+          isRefreshing: false,
           loaded: true
         });
 
-       console.log('fetch data completed');
+        console.log('fetch data completed');
       });
     });
   },
   render: function() {
+    console.log('render history.js');
     var content = !this.state.loaded ? this._renderLoadingView() :
       <PullToRefreshViewAndroid
         style={styles.layout}
@@ -186,7 +191,8 @@ var CallHistory = React.createClass({
 
     this.props.navigator.push({
       name: 'contact.create',
-      contact: contact
+      contact: contact,
+      callback: this._fetchData
     })
   }
 });

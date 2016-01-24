@@ -108,12 +108,8 @@ var ContactList = React.createClass({
     this.props.navigator.push({
         name: 'contact.create',
         contact: contact,
-        callback: this._createContactCallback
+        callback: this._fetchData
       });
-  },
-  _createContactCallback: function() {
-    // console.log('create contact callback');
-    this._fetchData();
   },
   onActionSelected: function(position) {
     // console.log('on list action selected1');
