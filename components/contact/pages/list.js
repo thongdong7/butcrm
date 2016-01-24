@@ -9,12 +9,15 @@ var {
   AppRegistry,
   Image,
   ListView,
+  PullToRefreshViewAndroid,
   StyleSheet,
   Text,
   ToolbarAndroid,
   TouchableHighlight,
   View,
 } = React;
+
+var emitter = require('../../event');
 
 var contactService = require('../service');
 //var ContactCreate = require('./create.js');
@@ -26,35 +29,46 @@ var ContactList = React.createClass({
       dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1.contact_id !== row2.contact_id,
       }),
+      isRefreshing: false,
       loaded: false,
     };
   },
   componentDidMount: function() {
-    this.fetchData();
+    emitter.addListener('contact.service.ready', this._fetchData);
+
+    this._fetchData();
   },
-  fetchData: function() {
+  _fetchData: function() {
     // console.log('fetchData1');
+    this.setState({isRefreshing: true})
     contactService.list().then((contacts) => {
         // console.log('contacts', contacts);
-
         this.setState({
           dataSource: this.state.dataSource.cloneWithRows(contacts),
+          isRefreshing: false,
           loaded: true,
         });
+         console.log('fetch data completed');
     }).done();
   },
   render: function() {
-    console.log('render list1');
+    console.log('render list3');
     var content = !this.state.loaded ? this._renderLoadingView() :
-      <ListView
-          dataSource={this.state.dataSource}
-          renderRow={this._renderContact}
-          style={styles.listView}
-          automaticallyAdjustContentInsets={false}
-          keyboardDismissMode="on-drag"
-          keyboardShouldPersistTaps={true}
-          showsVerticalScrollIndicator={false}
-        />;
+      <PullToRefreshViewAndroid
+        style={styles.layout}
+        refreshing={this.state.isRefreshing}
+        onRefresh={this._fetchData}
+        >
+        <ListView
+            dataSource={this.state.dataSource}
+            renderRow={this._renderContact}
+            style={styles.listView}
+            automaticallyAdjustContentInsets={false}
+            keyboardDismissMode="on-drag"
+            keyboardShouldPersistTaps={true}
+            showsVerticalScrollIndicator={false}
+          />
+      </PullToRefreshViewAndroid>;
 
     return (
       <View style={styles.container}>
@@ -67,7 +81,6 @@ var ContactList = React.createClass({
       </View>
     );
   },
-
   _renderLoadingView: function() {
     return (
       <View style={styles.container}>
@@ -106,18 +119,17 @@ var ContactList = React.createClass({
 });
 
 var styles = StyleSheet.create({
+  layout: {
+    flex: 1,
+  },
   container: {
     flex: 1,
   },
   itemContainer: {
     flex: 1,
     flexDirection: 'row',
-//    justifyContent: 'center',
-//    alignItems: 'right',
-//    backgroundColor: '#F5FCFF',
   },
   rightContainer: {
-//    flex: 1,
     padding: 10,
     marginLeft: 10,
   },
@@ -135,12 +147,10 @@ var styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-//    marginBottom: 8,
     textAlign: 'right',
   },
   phone: {
     fontSize: 10,
-//    marginBottom: 8,
     textAlign: 'right',
   },
   year: {
