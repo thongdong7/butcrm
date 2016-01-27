@@ -4,6 +4,7 @@ let isServiceReady = false;
 
 var emitter = require('../event');
 emitter.addListener('db.ready', (db) => {
+    console.log('contact service is ready');
     isServiceReady = true;
     emitter.emit('contact.service.ready');
 });

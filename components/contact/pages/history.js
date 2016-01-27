@@ -13,7 +13,6 @@ var {
   StyleSheet,
   Text,
   ToastAndroid,
-  ToolbarAndroid,
   TouchableHighlight,
   View,
 } = React;
@@ -23,6 +22,8 @@ var emitter = require('../../event');
 var CallHistoryAndroid = require('../../CallHistoryAndroid');
 var contactService = require('../service');
 var moment = require('moment');
+
+var DefaultPage = require('../../common/pages/default.js');
 
 var styles = StyleSheet.create({
   container: {
@@ -63,31 +64,39 @@ var styles = StyleSheet.create({
 // Only show last 20 calls
 var limit = 20;
 
-var CallHistory = React.createClass({
-  getInitialState: function() {
-    return {
+class CallHistory extends DefaultPage {
+  constructor(props) {
+    super(props);
+    this.state = {
       dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
       }),
       isRefreshing: false,
       loaded: false
     };
-  },
-  componentDidMount: function() {
-    emitter.addListener('contact.service.ready', this._fetchData);
+  }
+
+  getTitle() {
+    return "Call History";
+  }
+
+  componentDidMount() {
+    // console.log('componentDidMount')
+    emitter.addListener('contact.service.ready', this._fetchData.bind(this));
 
     this._fetchData();
-  },
-  _fetchData: function() {
+  }
+
+  _fetchData() {
     this.setState({
       isRefreshing: true
     })
     if (!contactService.isReady()) {
-//      console.log('contact service is not ready');
+      // console.log('contact service is not ready');
       return;
     }
 
-//    console.log('fetch data');
+    // console.log('fetch data');
 
     CallHistoryAndroid.getUnknownCalls(limit, (data) => {
       // Get contacts base on this phones
@@ -97,7 +106,7 @@ var CallHistory = React.createClass({
       }
 
       contactService.getByPhones(phones).then((phoneMap) => {
-       console.log('phone map2', phoneMap)
+       // console.log('phone map2')
         for (let i in data) {
           let phone = data[i].phone;
           if (phoneMap[phone] != undefined) {
@@ -108,19 +117,20 @@ var CallHistory = React.createClass({
 
         return data;
       }).then((data) => {
-//        console.log('apply phone map', data);
+       // console.log('apply phone map');
         this.setState({
           dataSource: this.state.dataSource.cloneWithRows(data),
           isRefreshing: false,
           loaded: true
         });
 
-        console.log('fetch data completed');
+        // console.log('fetch data completed');
       });
     });
-  },
-  render: function() {
-    console.log('render history.js');
+  }
+
+  renderContent() {
+    // console.log('render history.js2', this.state.loaded);
     var content = !this.state.loaded ? this._renderLoadingView() :
       <PullToRefreshViewAndroid
         style={styles.layout}
@@ -129,7 +139,7 @@ var CallHistory = React.createClass({
         >
         <ListView
             dataSource={this.state.dataSource}
-            renderRow={this._renderCall}
+            renderRow={this._renderCall.bind(this)}
             style={styles.listView}
             automaticallyAdjustContentInsets={false}
             keyboardDismissMode="on-drag"
@@ -138,23 +148,10 @@ var CallHistory = React.createClass({
           />
       </PullToRefreshViewAndroid>;
 
-    return (
-      <View style={styles.container}>
-        <ToolbarAndroid
-          title="Call History"
-          // actions={[{title: 'Refresh', show: 'always'}]}
-          onActionSelected={this._onActionSelected}
-          style={styles.toolbar} />
-        {content}
-      </View>
-    );
-  },
-  _onActionSelected: function(position) {
-    if (position === 0) { // index of 'Settings'
-      this._fetchData();
-    }
-  },
-  _renderLoadingView: function() {
+    return content;
+  }
+
+  _renderLoadingView() {
     return (
       <View style={styles.container}>
         <Text>
@@ -162,8 +159,9 @@ var CallHistory = React.createClass({
         </Text>
       </View>
     );
-  },
-  _renderCall: function(call) {
+  }
+
+  _renderCall(call) {
     return (
       <TouchableHighlight
         onPress={() => this._onCallSelected(call)}>
@@ -178,8 +176,9 @@ var CallHistory = React.createClass({
         </View>
       </TouchableHighlight>
     );
-  },
-  _onCallSelected: function(call) {
+  }
+
+  _onCallSelected(call) {
     let contact;
     if (call.contact) {
       contact = call.contact;
@@ -195,6 +194,6 @@ var CallHistory = React.createClass({
       callback: this._fetchData
     })
   }
-});
+}
 
 module.exports = CallHistory;
