@@ -1,7 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
 'use strict';
 
 var React = require('react-native');
@@ -21,6 +17,7 @@ var {
 var ContactList = require('./list');
 var dismissKeyboard = require('dismissKeyboard');
 var contactService = require("../service");
+var DefaultPage = require('../../common/pages/default.js');
 
 var styles = StyleSheet.create({
   toolbar: {
@@ -29,8 +26,10 @@ var styles = StyleSheet.create({
   },
 });
 
-var ContactCreate = React.createClass({
-  getInitialState: function() {
+class ContactCreate extends DefaultPage {
+  constructor(props) {
+    super(props);
+
     let state = {
       contact_id: undefined,
       name: null,
@@ -44,17 +43,16 @@ var ContactCreate = React.createClass({
       }
     }
 
-    return state;
-  },
-  render: function() {
+    this.state = state;
+  }
+
+  getTitle() {
+    return "Create contact";
+  }
+
+  renderContent() {
     return (
       <View>
-        <ToolbarAndroid
-         title="Create contact"
-         style={styles.toolbar}
-         actions={[{title: 'Save', show: 'always'}]}
-         onActionSelected={this.onActionSelected} />
-
         <View style={{padding: 15, flex: 1}}>
         <TextInput
           autoCapitalize='words'
@@ -73,14 +71,20 @@ var ContactCreate = React.createClass({
         </View>
       </View>
     );
-  },
-  onActionSelected: function(position) {
+  }
+
+  getActions() {
+    return [{title: 'Save', show: 'always'}];
+  }
+
+  onActionSelected(position) {
     // console.log('on action selected');
     if (position === 0) { // index of 'Settings'
       this.save();
     }
-  },
-  save: function() {
+  }
+
+  save() {
     if (this.state.name) {
       dismissKeyboard();
       contactService.create(this.state).then(() => {
@@ -93,23 +97,10 @@ var ContactCreate = React.createClass({
 
         ToastAndroid.show(msg, ToastAndroid.SHORT);
         // close this page page
-        this._closePage();
+        this.closePage();
       });
      }
-  },
-  _closePage: function() {
-    console.log('go to contact list1');
-    if (this.props.route && this.props.route.callback) {
-      this.props.route.callback();
-    }
-
-    this.props.navigator.pop();
-//    this.props.navigator.push({
-//        title: "Contacts",
-//        name: 'contact.list',
-//        // name: 'hello',
-//      });
   }
-});
+}
 
 module.exports = ContactCreate;

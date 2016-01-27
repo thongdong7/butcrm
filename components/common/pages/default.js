@@ -10,7 +10,7 @@ var {
 
 class DefaultPage extends React.Component {
   render() {
-    console.log('default render');
+//    console.log('default render');
 
     return (
       <View style={styles.container}>
@@ -18,7 +18,8 @@ class DefaultPage extends React.Component {
           ref="toolbar"
           navIcon={require('../../../images/menu.png')}
           onIconClicked={this._onNavIconClicked.bind(this)}
-          onActionSelected={this._onActionSelected.bind(this)}
+          actions={this.getActions()}
+          onActionSelected={this.onActionSelected.bind(this)}
           title={this.getTitle()}
           style={styles.toolbar} />
         {this.renderContent()}
@@ -30,21 +31,35 @@ class DefaultPage extends React.Component {
     return "";
   }
 
+  getActions() {
+    return [];
+  }
+
   renderContent() {
     return (
       <Text>Put your content here</Text>
       );
   }
 
-  _onActionSelected() {
-    console.log('action selected')
+  onActionSelected(position) {
+    console.log('action selected', position)
   }
 
   _onNavIconClicked() {
-    console.log('nav icon clicked');
+//    console.log('nav icon clicked');
     // this.refs.drawer.toggle();
     if (this.props.onNavIconClicked) {
       this.props.onNavIconClicked();
+    }
+  }
+
+  closePage() {
+    if (this.props.route && this.props.route.callback) {
+      this.props.route.callback();
+    }
+
+    if (this.props.navigator) {
+      this.props.navigator.pop();
     }
   }
 }

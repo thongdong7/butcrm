@@ -1,7 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
 'use strict';
 
 var React = require('react-native');
@@ -191,7 +187,7 @@ class CallHistory extends DefaultPage {
     this.props.navigator.push({
       name: 'contact.create',
       contact: contact,
-      callback: this._fetchData
+      callback: this._fetchData.bind(this)
     })
   }
 }
