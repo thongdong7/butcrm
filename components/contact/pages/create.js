@@ -33,7 +33,8 @@ class ContactCreate extends DefaultPage {
     let state = {
       contact_id: undefined,
       name: null,
-      phone: null
+      phone: null,
+      note: null,
     }
 
     let route = this.props.route;
@@ -57,16 +58,21 @@ class ContactCreate extends DefaultPage {
         <TextInput
           autoCapitalize='words'
           placeholder='Name'
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
           onChangeText={(text) => this.setState({name: text})}
           value={this.state.name}
         />
         <TextInput
           placeholder='Phone'
           keyboardType='numeric'
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
           onChangeText={(text) => this.setState({phone: text})}
           value={this.state.phone}
+        />
+        <TextInput
+          placeholder='Note'
+          multiline={true}
+          numberOfLines={3}
+          onChangeText={(text) => this.setState({note: text})}
+          value={this.state.note}
         />
         </View>
       </View>
