@@ -72,7 +72,7 @@ var Menu = React.createClass({
     console.log('menu selected', menuItem, this.props);
 
     if (this.props.navigatorProvider) {
-      this.props.navigatorProvider().push({
+      this.props.navigatorProvider().resetTo({
         name: menuItem.route,
       })
     }
