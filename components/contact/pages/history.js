@@ -167,7 +167,6 @@ class CallHistory extends DefaultPage {
             <Text style={styles.phone}>{call.phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3')}</Text>
             <Text style={styles.callDate}>{moment(call.date).fromNow()}</Text>
             <Text style={styles.callType}>{call.type}</Text>
-
           </View>
         </View>
       </TouchableHighlight>

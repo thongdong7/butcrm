@@ -20,25 +20,38 @@ var {
 var emitter = require('../../event');
 
 var contactService = require('../service');
+var DefaultPage = require('../../common/pages/default.js');
 //var ContactCreate = require('./create.js');
 // var Hello = require('./hello.js');
 
-var ContactList = React.createClass({
-  getInitialState: function() {
-    return {
+class ContactList extends DefaultPage {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
       }),
       isRefreshing: false,
       loaded: false,
     };
-  },
-  componentDidMount: function() {
-    emitter.addListener('contact.service.ready', this._fetchData);
+  }
+
+  getTitle() {
+    return "Contact list";
+  }
+
+  getActions() {
+    return [{title: 'Add', show: 'always'}];
+  }
+
+  componentDidMount() {
+    emitter.addListener('contact.service.ready', this._fetchData.bind(this));
 
     this._fetchData();
-  },
-  _fetchData: function() {
+  }
+
+  _fetchData() {
     // console.log('fetchData1');
     this.setState({isRefreshing: true})
     contactService.list().then((contacts) => {
@@ -50,8 +63,9 @@ var ContactList = React.createClass({
         });
         // console.log('fetch data and set state completed');
     }).done();
-  },
-  render: function() {
+  }
+
+  renderContent() {
     // console.log('render list3');
     var content = !this.state.loaded ? this._renderLoadingView() :
       <PullToRefreshViewAndroid
@@ -61,7 +75,7 @@ var ContactList = React.createClass({
         >
         <ListView
             dataSource={this.state.dataSource}
-            renderRow={this._renderContact}
+            renderRow={this._renderContact.bind(this)}
             style={styles.listView}
             automaticallyAdjustContentInsets={false}
             keyboardDismissMode="on-drag"
@@ -72,16 +86,12 @@ var ContactList = React.createClass({
 
     return (
       <View style={styles.container}>
-        <ToolbarAndroid
-           title="Contact List"
-           style={styles.toolbar}
-           actions={[{title: 'Add', show: 'always'}]}
-           onActionSelected={this.onActionSelected} />
         {content}
       </View>
     );
-  },
-  _renderLoadingView: function() {
+  }
+
+  _renderLoadingView() {
     return (
       <View style={styles.container}>
         <Text>
@@ -89,9 +99,9 @@ var ContactList = React.createClass({
         </Text>
       </View>
     );
-  },
+  }
 
-  _renderContact: function(contact) {
+  _renderContact(contact) {
     return (
       <TouchableHighlight onPress={() => this.gotoContactCreate(contact)}>
         <View style={styles.itemContainer}>
@@ -102,22 +112,24 @@ var ContactList = React.createClass({
         </View>
       </TouchableHighlight>
     );
-  },
-  gotoContactCreate: function(contact) {
+  }
+
+  gotoContactCreate(contact) {
     console.log(`contact clicked `, contact);
     this.props.navigator.push({
         name: 'contact.create',
         contact: contact,
         callback: this._fetchData
       });
-  },
-  onActionSelected: function(position) {
+  }
+
+  onActionSelected(position) {
     // console.log('on list action selected1');
     if (position === 0) { // index of 'Settings'
       this.gotoContactCreate();
     }
-  },
-});
+  }
+}
 
 var styles = StyleSheet.create({
   layout: {

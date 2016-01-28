@@ -74,7 +74,7 @@ class ButCRMApp extends React.Component {
 
   render() {
     console.log('render app');
-    var initialRoute = {name: 'contact.history'};
+    var initialRoute = {name: 'contact.list'};
     let title;
     if (this.state && this.state.title) {
       title = this.state.title;
@@ -84,7 +84,7 @@ class ButCRMApp extends React.Component {
         ref="drawer"
         tapToClose={true}
         type="static"
-        content={<NavigationBar />}
+        content={<NavigationBar hideDrawer={this._hideDrawer.bind(this)} navigatorProvider={this._getNavigator.bind(this)} />}
         openDrawerOffset={100}
         styles={{main: {shadowColor: "#000000", shadowOpacity: 0.4, shadowRadius: 3}}}
         tweenHandler={Drawer.tweenPresets.parallax}
@@ -96,6 +96,14 @@ class ButCRMApp extends React.Component {
         />
       </Drawer>
     );
+  }
+
+  _getNavigator() {
+    return _navigator;
+  }
+
+  _hideDrawer() {
+    this.refs.drawer.close();
   }
 
   _routeMapper(route, navigationOperations, onComponentRef) {
