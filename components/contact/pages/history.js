@@ -131,7 +131,7 @@ class CallHistory extends DefaultPage {
       <PullToRefreshViewAndroid
         style={styles.layout}
         refreshing={this.state.isRefreshing}
-        onRefresh={this._fetchData}
+        onRefresh={this._fetchData.bind(this)}
         >
         <ListView
             dataSource={this.state.dataSource}
