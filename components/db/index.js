@@ -54,18 +54,18 @@ var schema = [
         + "tag_id INTEGER PRIMARY KEY AUTOINCREMENT,"
         + "name VARCHAR(255) NOT NULL UNIQUE"
     + ");",
-     "CREATE TABLE contact_tag("
-         + "contact_id INTEGER NOT NULL,"
-         + "tag_id INTEGER NOT NULL,"
-          + "FOREIGN KEY(contact_id) REFERENCES contact(contact_id),"
-          + "FOREIGN KEY(tag_id) REFERENCES tag(tag_id)"
-     + ");",
-     "INSERT INTO tag(tag_id, name) VALUES(1, 'Mua o');",
-     "INSERT INTO tag(tag_id, name) VALUES(2, 'Dau tu');",
-     "INSERT INTO tag(tag_id, name) VALUES(3, 'Tiem nang');",
-     "INSERT INTO tag(tag_id, name) VALUES(4, 'Dang quan tam');",
+    "CREATE TABLE contact_tag("
+        + "contact_id INTEGER NOT NULL,"
+        + "tag_id INTEGER NOT NULL,"
+         + "FOREIGN KEY(contact_id) REFERENCES contact(contact_id),"
+         + "FOREIGN KEY(tag_id) REFERENCES tag(tag_id)"
+    + ");",
+    "INSERT INTO tag(tag_id, name) VALUES(1, 'Mua o');",
+    "INSERT INTO tag(tag_id, name) VALUES(2, 'Dau tu');",
+    "INSERT INTO tag(tag_id, name) VALUES(3, 'Tiem nang');",
+    "INSERT INTO tag(tag_id, name) VALUES(4, 'Dang quan tam');",
 
-     "INSERT INTO contact(contact_id, name, phone) VALUES(1, 'A Hung', '123456789');",
+    "INSERT INTO contact(contact_id, name, phone) VALUES(1, 'A Hung', '123456789');",
     "INSERT INTO contact(name, phone) VALUES('C Mai', '223456789');",
     "INSERT INTO contact(name, phone) VALUES('A Vu', '323456789');",
     "INSERT INTO contact(name, phone) VALUES('A Tuan', '423456789');",
@@ -81,10 +81,10 @@ var schema = [
     "INSERT INTO contact(name, phone) VALUES('A Nguyen', '5123456789');",
     "INSERT INTO contact(name, phone) VALUES('A Tuan', '6123456789');",
 
-     "INSERT INTO contact_tag(contact_id, tag_id) VALUES(1, 1);",
-     "INSERT INTO contact_tag(contact_id, tag_id) VALUES(1, 2);",
-     "INSERT INTO contact_tag(contact_id, tag_id) VALUES(1, 3);",
-     "INSERT INTO contact_tag(contact_id, tag_id) VALUES(1, 4);",
+    "INSERT INTO contact_tag(contact_id, tag_id) VALUES(1, 1);",
+    "INSERT INTO contact_tag(contact_id, tag_id) VALUES(1, 2);",
+    "INSERT INTO contact_tag(contact_id, tag_id) VALUES(1, 3);",
+    "INSERT INTO contact_tag(contact_id, tag_id) VALUES(1, 4);",
 
 ];
 
