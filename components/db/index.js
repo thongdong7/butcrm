@@ -20,9 +20,9 @@ var {
 var emitter = require('../event');
 
 var SQLite = require('react-native-sqlite-storage');
-SQLite.DEBUG(false);
+SQLite.DEBUG(true);
 SQLite.enablePromise(true);
-var database_name = "Test.db";
+var database_name = "Test1.db";
 var database_version = "1.0";
 var database_displayname = "SQLite Test Database";
 var database_size = 200000;
@@ -40,57 +40,58 @@ var ready = false;
 
 var p = SQLite.openDatabase(database_name, database_version, database_displayname, database_size, openCB, errorCB).then((DB) => {
     db = DB;
+    return db;
 }).then(createDatabase);
 
 var schema = [
     "CREATE TABLE contact("
         + "contact_id INTEGER PRIMARY KEY AUTOINCREMENT,"
         + "name VARCHAR(255) NOT NULL,"
-        + "phone VARCHAR(255) NOT NULL,"
+        + "phone VARCHAR(255) NOT NULL UNIQUE,"
         + "note TEXT"
     + ");",
+    "CREATE TABLE tag("
+        + "tag_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+        + "name VARCHAR(255) NOT NULL UNIQUE"
+    + ");",
+     "CREATE TABLE contact_tag("
+         + "contact_id INTEGER NOT NULL,"
+         + "tag_id INTEGER NOT NULL,"
+          + "FOREIGN KEY(contact_id) REFERENCES contact(contact_id),"
+          + "FOREIGN KEY(tag_id) REFERENCES tag(tag_id)"
+     + ");",
+     "INSERT INTO tag(tag_id, name) VALUES(1, 'Mua o');",
+     "INSERT INTO tag(tag_id, name) VALUES(2, 'Dau tu');",
+     "INSERT INTO tag(tag_id, name) VALUES(3, 'Tiem nang');",
+     "INSERT INTO tag(tag_id, name) VALUES(4, 'Dang quan tam');",
 
-    "INSERT INTO contact(name, phone) VALUES('A Hung', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('C Mai', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quy', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan1', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
-    "INSERT INTO contact(name, phone) VALUES('A Quan', '123456789');",
+     "INSERT INTO contact(contact_id, name, phone) VALUES(1, 'A Hung', '123456789');",
+    "INSERT INTO contact(name, phone) VALUES('C Mai', '223456789');",
+    "INSERT INTO contact(name, phone) VALUES('A Vu', '323456789');",
+    "INSERT INTO contact(name, phone) VALUES('A Tuan', '423456789');",
+    "INSERT INTO contact(name, phone) VALUES('A Vy', '523456789');",
+    "INSERT INTO contact(name, phone) VALUES('A Truong', '623456789');",
+    "INSERT INTO contact(name, phone) VALUES('A Giang', '723456789');",
+    "INSERT INTO contact(name, phone) VALUES('A Trung', '823456789');",
+    "INSERT INTO contact(name, phone) VALUES('A Phuong', '923456789');",
+    "INSERT INTO contact(name, phone) VALUES('A Hoang Anh', '1123456789');",
+    "INSERT INTO contact(name, phone) VALUES('A Duy', '2123456789');",
+    "INSERT INTO contact(name, phone) VALUES('A Khoa', '3123456789');",
+    "INSERT INTO contact(name, phone) VALUES('A Vuong', '4123456789');",
+    "INSERT INTO contact(name, phone) VALUES('A Nguyen', '5123456789');",
+    "INSERT INTO contact(name, phone) VALUES('A Tuan', '6123456789');",
+
+     "INSERT INTO contact_tag(contact_id, tag_id) VALUES(1, 1);",
+     "INSERT INTO contact_tag(contact_id, tag_id) VALUES(1, 2);",
+     "INSERT INTO contact_tag(contact_id, tag_id) VALUES(1, 3);",
+     "INSERT INTO contact_tag(contact_id, tag_id) VALUES(1, 4);",
+
 ];
 
 function executeSql(sqls) {
     var p;
     for (let i in sqls) {
+        console.log(sqls[i]);
         let j = i;
         if (p == undefined) {
             p = db.executeSql(sqls[j]);
@@ -105,13 +106,17 @@ function executeSql(sqls) {
 }
 
 function createDatabase() {
+    console.log('createDatabase');
     // Get the version
-    var p = Promise.resolve().
+    // var p = Promise.resolve().
+    var p =
 
-    // executeSql([
-    //     "DROP TABLE IF EXISTS version;",
-    //     "DROP TABLE IF EXISTS contact;",
-    // ]).
+    executeSql([
+        "DROP TABLE IF EXISTS version;",
+        "DROP TABLE IF EXISTS contact_tag;",
+        "DROP TABLE IF EXISTS contact;",
+        "DROP TABLE IF EXISTS tag;",
+    ]).
 
     then(getVersion).then((version) => {
         console.log("aha, a version", version);
