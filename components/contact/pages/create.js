@@ -18,6 +18,7 @@ var ContactList = require('./list');
 var dismissKeyboard = require('dismissKeyboard');
 var contactService = require("../service");
 var DefaultPage = require('../../common/pages/default.js');
+import TagAutoComplete from '../../tag';
 
 var styles = StyleSheet.create({
   toolbar: {
@@ -67,6 +68,7 @@ class ContactCreate extends DefaultPage {
           onChangeText={(text) => this.setState({phone: text})}
           value={this.state.phone}
         />
+        <TagAutoComplete />
         <TextInput
           placeholder='Note'
           multiline={true}

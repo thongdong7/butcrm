@@ -20,7 +20,7 @@ var {
 var emitter = require('../event');
 
 var SQLite = require('react-native-sqlite-storage');
-SQLite.DEBUG(true);
+SQLite.DEBUG(false);
 SQLite.enablePromise(true);
 var database_name = "Test1.db";
 var database_version = "1.0";
