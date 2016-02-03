@@ -57,7 +57,6 @@ class ContactList extends DefaultPage {
 
     let contacts = await contactService.list();
 
-    // console.log('contacts', contacts);
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(contacts),
       isRefreshing: false,
@@ -120,7 +119,7 @@ class ContactList extends DefaultPage {
     this.props.navigator.push({
         name: 'contact.create',
         contact: contact,
-        callback: this._fetchData
+        callback: this._fetchData.bind(this)
       });
   }
 
