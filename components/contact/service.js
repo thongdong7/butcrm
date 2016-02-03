@@ -49,24 +49,25 @@ function createContact(contact) {
     return getDb().executeSql(sql, params);
 }
 
-function list() {
+async function list() {
     if (!isServiceReady) {
-        return Promise.resolve([]);
+        return [];
     }
 
     var sql = "SELECT * FROM contact";
-    return getDb().executeSql(sql).then(([results]) => {
-        if (results.rows == undefined) {
-            return [];
-        }
+    let db = await getDb();
+    let [results] = await db.executeSql(sql);
 
-        let ret = [];
-        for (let i=0;i<results.rows.length; i++) {
-            ret.push(results.rows.item(i));
-        }
+    if (results.rows == undefined) {
+        return [];
+    }
 
-        return ret;
-    });
+    let ret = [];
+    for (let i=0;i<results.rows.length; i++) {
+        ret.push(results.rows.item(i));
+    }
+
+    return ret;
 }
 
 function getByPhones(phones) {
@@ -100,5 +101,5 @@ module.exports = {
     isReady: () => isServiceReady,
     create: createContact,
     list: list,
-    getByPhones: getByPhones
+    getByPhones: getByPhones,
 };

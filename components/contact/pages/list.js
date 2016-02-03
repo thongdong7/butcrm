@@ -51,18 +51,19 @@ class ContactList extends DefaultPage {
     this._fetchData();
   }
 
-  _fetchData() {
+  async _fetchData() {
     // console.log('fetchData1');
     this.setState({isRefreshing: true})
-    contactService.list().then((contacts) => {
-        // console.log('contacts', contacts);
-        this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(contacts),
-          isRefreshing: false,
-          loaded: true,
-        });
-        // console.log('fetch data and set state completed');
-    }).done();
+
+    let contacts = await contactService.list();
+
+    // console.log('contacts', contacts);
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(contacts),
+      isRefreshing: false,
+      loaded: true,
+    });
+    // console.log('fetch data and set state completed');
   }
 
   renderContent() {
