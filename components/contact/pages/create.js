@@ -116,22 +116,22 @@ class ContactCreate extends DefaultPage {
     }
   }
 
-  save() {
+  async save() {
     if (this.state.name) {
       dismissKeyboard();
-      contactService.create(this.state).then(() => {
-        let msg;
-        if (this.state.contact_id) {
-          msg = `Updated ${this.state.name}`;
-        } else {
-          msg = `Added ${this.state.name} to list`;
-        }
+      await contactService.create(this.state);
 
-        ToastAndroid.show(msg, ToastAndroid.SHORT);
-        // close this page page
-        this.closePage();
-      });
-     }
+      let msg;
+      if (this.state.contact_id) {
+        msg = `Updated ${this.state.name}`;
+      } else {
+        msg = `Added ${this.state.name} to list`;
+      }
+
+      ToastAndroid.show(msg, ToastAndroid.SHORT);
+      // close this page page
+      this.closePage();
+    }
   }
 }
 

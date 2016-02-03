@@ -9,7 +9,7 @@ emitter.addListener('db.ready', (db) => {
     emitter.emit('contact.service.ready');
 });
 
-function createContact(contact) {
+async function createContact(contact) {
     // return Promise.resolve();
     let sql, params;
     if (contact && contact.contact_id) {
@@ -46,7 +46,8 @@ function createContact(contact) {
         sql = "INSERT INTO contact("+paramSQL.join(",") + ") VALUES("+paramSQL2.join(',')+")";
     }
     console.log(sql, params);
-    return getDb().executeSql(sql, params);
+    let db = await getDb();
+    return await db.executeSql(sql, params);
 }
 
 async function list() {
