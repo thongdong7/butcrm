@@ -2,15 +2,9 @@
 
 import React, {Component} from 'react-native';
 var {
-  AppRegistry,
-  Image,
-  ListView,
   StyleSheet,
-  ScrollView,
-  ToastAndroid,
   Text,
   TextInput,
-  ToolbarAndroid,
   TouchableHighlight,
   View,
 } = React;
@@ -22,26 +16,12 @@ class TagAutoComplete extends Component {
   constructor(props) {
     super(props);
 
-    var types = [
-      {
-          id: 1,
-          name: "Dang co nhu cau"
-      },
-      {
-          id: 2,
-          name: "Mua o"
-      },
-      {
-          id: 3,
-          name: "Dau tu"
-      }
-    ];
     var typeMap = {};
-    types.forEach(type => typeMap[type.id] = type);
+    props.data.forEach(type => typeMap[type.id] = type);
     this.state = {
       tag: "",
       selectedTypes: [],
-      types: types,
+      types: props.data,
       typeMap: typeMap,
       matchedTags: [],
     };
@@ -74,7 +54,7 @@ class TagAutoComplete extends Component {
   }
 
   _onTagSelected(matchedTag) {
-    console.log('select tag', matchedTag);
+    // console.log('select tag', matchedTag);
     if (this.state.selectedTypes.indexOf(matchedTag.id) >= 0) {
       return;
     }
@@ -100,7 +80,7 @@ class TagAutoComplete extends Component {
       });
     }
 
-    console.log('matched tag1s', matchedTags);
+    // console.log('matched tag1s', matchedTags);
     this.setState({tag: text, matchedTags: matchedTags})
   }
 }

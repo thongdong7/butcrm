@@ -46,6 +46,30 @@ class ContactCreate extends DefaultPage {
     }
 
     this.state = state;
+    this.types = [
+      {
+          id: 1,
+          name: "Dang co nhu cau"
+      },
+      {
+          id: 2,
+          name: "Mua o"
+      },
+      {
+          id: 3,
+          name: "Dau tu"
+      },
+      {
+          id: 4,
+          group: 1,
+          name: "Nam"
+      },
+      {
+          id: 5,
+          group: 1,
+          name: "Nu"
+      }
+    ];
   }
 
   getTitle() {
@@ -68,7 +92,7 @@ class ContactCreate extends DefaultPage {
           onChangeText={(text) => this.setState({phone: text})}
           value={this.state.phone}
         />
-        <TagAutoComplete />
+        <TagAutoComplete data={this.types} />
         <TextInput
           placeholder='Note'
           multiline={true}
