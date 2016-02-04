@@ -9,7 +9,12 @@ var {
   View,
 } = React;
 
+var update = require('react-addons-update');
+
 var styles = StyleSheet.create({
+  tag: {
+    backgroundColor: "#eeeeee"
+  }
 });
 
 class TagAutoComplete extends Component {
@@ -30,7 +35,14 @@ class TagAutoComplete extends Component {
   render() {
     var items = [];
     this.state.selectedTypes.forEach((typeId) => {
-      items.push(<Text>{this.state.typeMap[typeId].name}</Text>);
+      items.push(
+        <View>
+          <Text style={styles.tag}>{this.state.typeMap[typeId].name}</Text>
+          <TouchableHighlight onPress={() => this._onTagRemove(typeId)}>
+            <Text>x</Text>
+          </TouchableHighlight>
+        </View>
+      );
     });
     var matchedItems = [];
     this.state.matchedTags.forEach((matchedTag) => {
@@ -51,6 +63,17 @@ class TagAutoComplete extends Component {
         {matchedItems}
       </View>
     );
+  }
+
+  _onTagRemove(tagId) {
+    var index = this.state.selectedTypes.indexOf(tagId);
+    if (index == -1) {
+      return;
+    }
+
+    this.setState({
+      selectedTypes: update(this.state.selectedTypes, {$splice: [[index, 1]]})
+    });
   }
 
   _onTagSelected(matchedTag) {
