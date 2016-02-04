@@ -85,47 +85,33 @@ var schema = [
     "INSERT INTO contact_tag(contact_id, tag_id) VALUES(1, 2);",
     "INSERT INTO contact_tag(contact_id, tag_id) VALUES(1, 3);",
     "INSERT INTO contact_tag(contact_id, tag_id) VALUES(1, 4);",
-
 ];
 
-function executeSql(sqls) {
-    var p;
+async function executeSql(sqls) {
     for (let i in sqls) {
-        console.log(sqls[i]);
-        let j = i;
-        if (p == undefined) {
-            p = db.executeSql(sqls[j]);
-        } else {
-            p = p.then(() => {
-                return db.executeSql(sqls[j]);
-            });
-        }
+        await db.executeSql(sqls[i]);
     }
-
-    return p;
 }
 
-function createDatabase() {
+async function createDatabase() {
     console.log('createDatabase');
     // Get the version
-    // var p = Promise.resolve().
-    var p =
 
-    executeSql([
+    await executeSql([
         "DROP TABLE IF EXISTS version;",
         "DROP TABLE IF EXISTS contact_tag;",
         "DROP TABLE IF EXISTS contact;",
         "DROP TABLE IF EXISTS tag;",
-    ]).
+    ]);
 
-    then(getVersion).then((version) => {
-        console.log("aha, a version", version);
-        return migrate(version);
-    }).then(() => {
-        console.log('migrate completed');
-        emitter.emit('db.ready', db);
-        ready = true;
-    });
+    let version = await getVersion();
+
+    console.log("aha, a version", version);
+    await migrate(version);
+
+    console.log('migrate completed');
+    emitter.emit('db.ready', db);
+    ready = true;
 
     return p;
 }
@@ -134,54 +120,40 @@ function isReady() {
     return ready;
 }
 
-function getVersion() {
-    return new Promise(function(resolve, reject) {
-        db.executeSql("SELECT version FROM version").then(([results]) => {
-            if (results.rows.length == 0) {
-                // No version row is inserted
-                resolve(0);
-            } else {
-                resolve(results.rows.item(0).version);
-            }
-        }).catch((error) => {
-            // Missed version table, create version table
-            db.executeSql("CREATE TABLE version(version INTEGER NOT NULL)").then(() => {
-                resolve(0);
-            }).catch(reject);
-        });
-    });
+async function getVersion() {
+    try {
+        let [results] = await db.executeSql("SELECT version FROM version");
+
+        if (results.rows.length == 0) {
+            // No version row is inserted
+            return 0;
+        } else {
+            return results.rows.item(0).version;
+        }
+    } catch (error) {
+        // Missed version table, create version table
+        await db.executeSql("CREATE TABLE version(version INTEGER NOT NULL)");
+        return 0;
+    }
 }
 
-function migrate(startVersion) {
+async function migrate(startVersion) {
     console.log("migrate from", startVersion);
-    var sequence;
     for (let i=startVersion;i<schema.length;i++) {
         let j = i;
-        if (sequence == undefined) {
-            sequence = db.executeSql(schema[j]);
-        } else {
-            sequence = sequence.then(()=>{
-                return db.executeSql(schema[j]);
-            });
-        }
+        await db.executeSql(schema[j]);
     }
 
-    if (sequence == undefined) {
-        sequence = Promise.resolve();
+    console.log("Migrate completed. Know update the version");
+    var query;
+    if (startVersion == 0) {
+        // There is no version in the db, insert
+        query = "INSERT INTO version(version) VALUES("+schema.length+")";
+    } else {
+        // Update version
+        query = "UPDATE version SET version = "+schema.length;
     }
-
-    return sequence.then(() => {
-        console.log("Migrate completed. Know update the version");
-        var query;
-        if (startVersion == 0) {
-            // There is no version in the db, insert
-            query = "INSERT INTO version(version) VALUES("+schema.length+")";
-        } else {
-            // Update version
-            query = "UPDATE version SET version = "+schema.length;
-        }
-        return db.executeSql(query);
-    });
+    return await db.executeSql(query);
 }
 
 function getDb() {
