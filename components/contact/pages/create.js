@@ -46,6 +46,7 @@ class ContactCreate extends DefaultPage {
     }
 
     this.state = state;
+    this._loadData();
     this.types = [
       {
           id: 1,
@@ -70,6 +71,14 @@ class ContactCreate extends DefaultPage {
           name: "Nu"
       }
     ];
+  }
+
+  async _loadData() {
+    console.log('load data');
+    let contactTypes = await contactService.getContactType();
+    console.log('contact types', contactTypes);
+
+    this.types = contactTypes;
   }
 
   getTitle() {

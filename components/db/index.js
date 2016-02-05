@@ -80,6 +80,7 @@ var schema = [
     "INSERT INTO contact(name, phone) VALUES('A Vuong', '4123456789');",
     "INSERT INTO contact(name, phone) VALUES('A Nguyen', '5123456789');",
     "INSERT INTO contact(name, phone) VALUES('A Tuan', '6123456789');",
+    "INSERT INTO contact(name, phone) VALUES('C Vi', '7123456789');",
 
     "INSERT INTO contact_tag(contact_id, tag_id) VALUES(1, 1);",
     "INSERT INTO contact_tag(contact_id, tag_id) VALUES(1, 2);",

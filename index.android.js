@@ -74,7 +74,7 @@ class ButCRMApp extends React.Component {
 
   render() {
     console.log('render app');
-    var initialRoute = {name: 'contact.list'};
+    var initialRoute = {name: 'contact.create'};
     let title;
     if (this.state && this.state.title) {
       title = this.state.title;

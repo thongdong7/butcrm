@@ -51,24 +51,42 @@ async function createContact(contact) {
 }
 
 async function list() {
-    if (!isServiceReady) {
-        return [];
-    }
+  if (!isServiceReady) {
+    return [];
+  }
 
-    var sql = "SELECT * FROM contact";
-    let db = await getDb();
-    let [results] = await db.executeSql(sql);
+  var sql = "SELECT * FROM contact";
+  let db = await getDb();
+  let [results] = await db.executeSql(sql);
 
-    if (results.rows == undefined) {
-        return [];
-    }
+  if (results.rows == undefined) {
+    return [];
+  }
 
-    let ret = [];
-    for (let i=0;i<results.rows.length; i++) {
-        ret.push(results.rows.item(i));
-    }
+  let ret = [];
+  for (let i=0;i<results.rows.length; i++) {
+    ret.push(results.rows.item(i));
+  }
 
-    return ret;
+  return ret;
+}
+
+async function getContactType() {
+  let sql = "SELECT tag_id as id, name FROM tag";
+
+  let db = await getDb();
+  let [results] = await db.executeSql(sql);
+
+  if (results.rows == undefined) {
+    return [];
+  }
+
+  let ret = [];
+  for (let i=0;i<results.rows.length; i++) {
+    ret.push(results.rows.item(i));
+  }
+
+  return ret;
 }
 
 function getByPhones(phones) {
@@ -103,4 +121,6 @@ module.exports = {
     create: createContact,
     list: list,
     getByPhones: getByPhones,
+    getContactType: getContactType
+
 };
