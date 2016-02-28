@@ -49,10 +49,11 @@ var Menu = React.createClass({
     };
   },
   render: function() {
+    console.log('render menu');
     return (
       <ListView
         dataSource={this.state.dataSource}
-        renderRow={this.renderMenuItem.bind(this)}
+        renderRow={this.renderMenuItem}
         style={styles.layout}
       />
     );

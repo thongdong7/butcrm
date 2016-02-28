@@ -74,7 +74,7 @@ class ButCRMApp extends React.Component {
 
   render() {
     console.log('render app');
-    var initialRoute = {name: 'contact.create'};
+    var initialRoute = {name: 'contact.list'};
     let title;
     if (this.state && this.state.title) {
       title = this.state.title;
@@ -122,7 +122,8 @@ class ButCRMApp extends React.Component {
   }
 
   _onNavIconClicked() {
-    // console.log('nav icon clicked');
+    console.log('nav icon clicked2');
+    // console.log('drawer', this.refs.drawer);
     this.refs.drawer.toggle();
   }
 }

@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "butCRM.app"
-               BlueprintName = "butCRM"
-               ReferencedContainer = "container:butCRM.xcodeproj">
+               BuildableName = "butcrm.app"
+               BlueprintName = "butcrm"
+               ReferencedContainer = "container:butcrm.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "butCRMTests.xctest"
-               BlueprintName = "butCRMTests"
-               ReferencedContainer = "container:butCRM.xcodeproj">
+               BuildableName = "butcrmTests.xctest"
+               BlueprintName = "butcrmTests"
+               ReferencedContainer = "container:butcrm.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,9 +47,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "butCRMTests.xctest"
-               BlueprintName = "butCRMTests"
-               ReferencedContainer = "container:butCRM.xcodeproj">
+               BuildableName = "butcrmTests.xctest"
+               BlueprintName = "butcrmTests"
+               ReferencedContainer = "container:butcrm.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -57,9 +57,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "butCRM.app"
-            BlueprintName = "butCRM"
-            ReferencedContainer = "container:butCRM.xcodeproj">
+            BuildableName = "butcrm.app"
+            BlueprintName = "butcrm"
+            ReferencedContainer = "container:butcrm.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -77,9 +77,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "butCRM.app"
-            BlueprintName = "butCRM"
-            ReferencedContainer = "container:butCRM.xcodeproj">
+            BuildableName = "butcrm.app"
+            BlueprintName = "butcrm"
+            ReferencedContainer = "container:butcrm.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -96,9 +96,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "butCRM.app"
-            BlueprintName = "butCRM"
-            ReferencedContainer = "container:butCRM.xcodeproj">
+            BuildableName = "butcrm.app"
+            BlueprintName = "butcrm"
+            ReferencedContainer = "container:butcrm.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

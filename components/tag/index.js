@@ -34,9 +34,9 @@ class TagAutoComplete extends Component {
 
   render() {
     var items = [];
-    this.state.selectedTypes.forEach((typeId) => {
+    this.state.selectedTypes.forEach((typeId, k) => {
       items.push(
-        <View>
+        <View key={k}>
           <Text style={styles.tag}>{this.state.typeMap[typeId].name}</Text>
           <TouchableHighlight onPress={() => this._onTagRemove(typeId)}>
             <Text>x</Text>
@@ -45,9 +45,9 @@ class TagAutoComplete extends Component {
       );
     });
     var matchedItems = [];
-    this.state.matchedTags.forEach((matchedTag) => {
+    this.state.matchedTags.forEach((matchedTag, k) => {
       matchedItems.push(
-        <TouchableHighlight onPress={() => this._onTagSelected(matchedTag)}>
+        <TouchableHighlight onPress={() => this._onTagSelected(matchedTag)} key={k}>
           <Text>{matchedTag.name}</Text>
         </TouchableHighlight>
       )

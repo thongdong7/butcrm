@@ -1,4 +1,4 @@
-rootProject.name = 'butCRM'
+rootProject.name = 'butcrm'
 
 include ':app'
 include ':react-native-sqlite-storage'

@@ -1,18 +1,15 @@
 {
-  "name": "butCRM",
+  "name": "butcrm",
   "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
+    "react-native": "^0.20.0",
     "fbemitter": "^2.0.1",
-    "gb-native-router": "^0.6.0",
-    "moment": "^2.11.1",
+    "react-native-drawer": "^1.16.7",
     "react-addons-update": "^0.14.7",
-    "react-native": "^0.18.1",
-    "react-native-drawer": "^1.13.0",
-    "react-native-simple-router": "^0.6.0",
     "react-native-sqlite-storage": "^2.1.3"
   }
 }
