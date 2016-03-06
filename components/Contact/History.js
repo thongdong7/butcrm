@@ -9,7 +9,7 @@ import React, {
   View,
 } from 'react-native'
 
-import emitter from '../event'
+import Emitter from '../Emitter'
 
 import CallHistoryAndroid from '../CallHistoryAndroid'
 import contactService from './service'
@@ -74,7 +74,7 @@ export default class CallHistory extends DefaultPage {
 
   componentDidMount() {
     // console.log('componentDidMount')
-    emitter.addListener('contact.service.ready', this._fetchData.bind(this));
+    Emitter.addListener('contact.service.ready', this._fetchData.bind(this));
 
     this._fetchData();
   }

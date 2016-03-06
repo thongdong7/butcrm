@@ -2,11 +2,11 @@ var {isReady, dbPromise, getDb, executeSql, insertAndGetId} = require("../DB");
 
 let isServiceReady = false;
 
-var emitter = require('../event');
-emitter.addListener('db.ready', (db) => {
+var Emitter = require('../Emitter');
+Emitter.addListener('db.ready', (db) => {
     console.log('contact service is ready');
     isServiceReady = true;
-    emitter.emit('contact.service.ready');
+    Emitter.emit('contact.service.ready');
 });
 
 async function createContact(contact, tagIds) {

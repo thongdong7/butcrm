@@ -1,12 +1,3 @@
-'use strict';
-
-// var React = require('react-native');
-// var {
-//   StyleSheet,
-//   Text,
-//   ToolbarAndroid,
-//   View,
-// } = React;
 import React, {Component, StyleSheet, Text, ToolbarAndroid, View} from 'react-native'
 
 export default class DefaultPage extends Component {

@@ -9,7 +9,7 @@ import React, {
   View,
 } from 'react-native'
 
-import emitter from '../event'
+import Emitter from '../Emitter'
 import contactService from './service'
 import DefaultPage from '../BasicPage';
 
@@ -35,7 +35,7 @@ export default class ContactList extends DefaultPage {
   }
 
   componentDidMount() {
-    emitter.addListener('contact.service.ready', this._fetchData.bind(this));
+    Emitter.addListener('contact.service.ready', this._fetchData.bind(this));
 
     this._fetchData();
   }
