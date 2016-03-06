@@ -1,11 +1,11 @@
 'use strict';
 
-import ContactCreate from './components/Contact/Create';
-import ContactList from './components/Contact/List';
-import CallHistory from './components/Contact/History';
+import ContactCreate from './Components/Contact/Create';
+import ContactList from './Components/Contact/List';
+import CallHistory from './Components/Contact/History';
 
-import NavigationBar from './components/Drawer';
-import DefaultPage from './components/BasicPage';
+import NavigationBar from './Components/Drawer';
+import DefaultPage from './Components/BasicPage';
 
 import Drawer from 'react-native-drawer'
 

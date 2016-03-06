@@ -1,8 +1,9 @@
-var {isReady, dbPromise, getDb, executeSql, insertAndGetId} = require("../DB");
+import {isReady, dbPromise, getDb, executeSql, insertAndGetId} from '../DB'
 
 let isServiceReady = false;
 
-var Emitter = require('../Emitter');
+import Emitter from '../Emitter'
+
 Emitter.addListener('db.ready', (db) => {
     console.log('contact service is ready');
     isServiceReady = true;
