@@ -1,4 +1,4 @@
-var {isReady, dbPromise, getDb, executeSql, insertAndGetId} = require("../db");
+var {isReady, dbPromise, getDb, executeSql, insertAndGetId} = require("../DB");
 
 let isServiceReady = false;
 
@@ -81,7 +81,7 @@ async function createContact(contact, tagIds) {
     console.log('remove tags', removeTagIds)
     if (removeTagIds.length > 0) {
       let removeTagParams = [contact.contact_id];
-      
+
       let tmp = [];
       for (let tagId of removeTagIds) {
         removeTagParams.push(tagId);

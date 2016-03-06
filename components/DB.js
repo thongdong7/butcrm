@@ -9,7 +9,7 @@ import React, {
   View,
 } from 'react-native'
 
-import emitter from '../event'
+import emitter from './event'
 
 import SQLite from 'react-native-sqlite-storage'
 
