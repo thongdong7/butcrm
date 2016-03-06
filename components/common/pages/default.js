@@ -38,7 +38,7 @@ class DefaultPage extends React.Component {
   renderContent() {
     return (
       <Text>Put your content here</Text>
-      );
+    );
   }
 
   onActionSelected(position) {
@@ -46,7 +46,7 @@ class DefaultPage extends React.Component {
   }
 
   _onNavIconClicked() {
-   console.log('nav icon clicked');
+    console.log('nav icon clicked');
     // this.refs.drawer.toggle();
     if (this.props.onNavIconClicked) {
       this.props.onNavIconClicked();

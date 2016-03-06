@@ -88,7 +88,7 @@ var schema = [
     "INSERT INTO contact_tag(contact_id, tag_id) VALUES(1, 4);",
 ];
 
-async function executeSql(sqls) {
+async function executeSqls(sqls) {
     for (let i in sqls) {
         await db.executeSql(sqls[i]);
     }
@@ -98,12 +98,16 @@ async function createDatabase() {
     console.log('createDatabase');
     // Get the version
 
-    await executeSql([
-        "DROP TABLE IF EXISTS version;",
-        "DROP TABLE IF EXISTS contact_tag;",
-        "DROP TABLE IF EXISTS contact;",
-        "DROP TABLE IF EXISTS tag;",
-    ]);
+    try {
+        await executeSqls([
+            "DROP TABLE IF EXISTS version;",
+            "DROP TABLE IF EXISTS contact_tag;",
+            "DROP TABLE IF EXISTS contact;",
+            "DROP TABLE IF EXISTS tag;",
+        ]);
+    } catch (err) {
+        console.log(err)
+    }
 
     let version = await getVersion();
 
@@ -142,7 +146,14 @@ async function migrate(startVersion) {
     console.log("migrate from", startVersion);
     for (let i=startVersion;i<schema.length;i++) {
         let j = i;
-        await db.executeSql(schema[j]);
+        try {
+            console.log("executeSql", schema[j]);
+
+            await db.executeSql(schema[j]);
+        } catch (err) {
+            console.log(err)
+        }
+
     }
 
     console.log("Migrate completed. Know update the version");
@@ -161,9 +172,34 @@ function getDb() {
     return db;
 }
 
+async function executeSql(query, params) {
+    let [ret] = await db.executeSql(query, params);
+
+    if (!ret || !ret.rows) {
+        return null;
+    }
+
+    let data = [];
+    for (let i=0;i<ret.rows.length;i++) {
+        data.push(ret.rows.item(i));
+    }
+
+    return data;
+}
+
+async function insertAndGetId(query, params, tableName, idColumn) {
+    await db.executeSql(query, params);
+    let idQuery = "SELECT "+idColumn+" FROM "+tableName+" ORDER BY "+idColumn+" DESC LIMIT 1";
+    let ret = await db.executeSql(idQuery);
+
+    return ret.rows.item(0)[idColumn];
+}
+
 module.exports = {
     isReady: isReady,
     dbPromise: p,
     db: db,
-    getDb: getDb
+    getDb: getDb,
+    executeSql: executeSql,
+    insertAndGetId: insertAndGetId
 };

@@ -1,4 +1,4 @@
-var {isReady, dbPromise, getDb} = require("../db");
+var {isReady, dbPromise, getDb, executeSql, insertAndGetId} = require("../db");
 
 let isServiceReady = false;
 
@@ -9,8 +9,7 @@ emitter.addListener('db.ready', (db) => {
     emitter.emit('contact.service.ready');
 });
 
-async function createContact(contact) {
-    // return Promise.resolve();
+async function createContact(contact, tagIds) {
     let sql, params;
     if (contact && contact.contact_id) {
         // Update contact
@@ -42,12 +41,77 @@ async function createContact(contact) {
             paramSQL2.push('?');
         }
 
-
         sql = "INSERT INTO contact("+paramSQL.join(",") + ") VALUES("+paramSQL2.join(',')+")";
     }
-    console.log(sql, params);
     let db = await getDb();
-    return await db.executeSql(sql, params);
+
+    // Get contact id after insert
+    let contactId;
+    if (contact.contact_id) {
+      // Update
+      contactId = contact.contact_id;
+
+      await executeSql(sql, params);
+    } else {
+      // Get inserted id
+      contactId = insertAndGetId(sql, params, "contact", "contact_id");
+    }
+
+    // Update tags
+    console.log('get current tag ids of this contact', tagIds);
+    let currentTagIds = [];
+    let removeTagIds = [];
+    if (contact.contact_id) {
+      currentTags = await executeSql("SELECT tag_id FROM contact_tag WHERE contact_id = ?", [contactId]);
+
+      // Find the tag need to be removed
+      console.log("Find the tag need to be removed", currentTagIds)
+      for (let currentTag of currentTags) {
+        let currentTagId = currentTag.tag_id
+        console.log('current tag id', currentTag, currentTagId, tagIds.indexOf(currentTagId))
+        currentTagIds.push(currentTagId)
+        if (tagIds.indexOf(currentTagId) < 0) {
+          // This tag is removed
+          removeTagIds.push(currentTagId);
+        }
+      }
+    }
+
+    // Remove tags
+    console.log('remove tags', removeTagIds)
+    if (removeTagIds.length > 0) {
+      let removeTagParams = [contact.contact_id];
+      
+      let tmp = [];
+      for (let tagId of removeTagIds) {
+        removeTagParams.push(tagId);
+        tmp.push("?");
+      }
+
+      let removeTagSQL = "DELETE FROM contact_tag WHERE contact_id = ? AND tag_id IN (" + tmp.join(",") + ")";
+
+      await executeSql(removeTagSQL, removeTagParams);
+    }
+
+    // Add tags
+    console.log("add tag")
+    console.log("current tagIds", currentTagIds)
+    let addTagIds = [];
+    for (let tagId of tagIds) {
+      console.log(tagId)
+      if (currentTagIds.indexOf(tagId) < 0) {
+        // This tag is new
+        addTagIds.push(tagId);
+      }
+    }
+
+    if (addTagIds.length > 0) {
+      for (let tagId of addTagIds) {
+        await executeSql("INSERT INTO contact_tag (contact_id, tag_id) VALUES (?, ?)", [contactId, tagId]);
+      }
+    }
+
+    return contact;
 }
 
 async function list() {
@@ -56,42 +120,36 @@ async function list() {
   }
 
   var sql = "SELECT * FROM contact";
-  let db = await getDb();
-  let [results] = await db.executeSql(sql);
+  return await executeSql(sql);
+}
 
-  if (results.rows == undefined) {
-    return [];
-  }
+async function getTagIds(contact_id) {
+    if (!isServiceReady) {
+      return [];
+    }
 
-  let ret = [];
-  for (let i=0;i<results.rows.length; i++) {
-    ret.push(results.rows.item(i));
-  }
+    var sql = "SELECT tag_id FROM contact_tag WHERE contact_id = ?";
+    let result = await executeSql(sql, [contact_id]);
 
-  return ret;
+    let ret = [];
+    for (let item of result) {
+      ret.push(item.tag_id);
+    }
+
+    ret.sort();
+
+    return ret;
 }
 
 async function getContactType() {
   let sql = "SELECT tag_id as id, name FROM tag";
 
-  let db = await getDb();
-  let [results] = await db.executeSql(sql);
-
-  if (results.rows == undefined) {
-    return [];
-  }
-
-  let ret = [];
-  for (let i=0;i<results.rows.length; i++) {
-    ret.push(results.rows.item(i));
-  }
-
-  return ret;
+  return await executeSql(sql);
 }
 
-function getByPhones(phones) {
+async function getByPhones(phones) {
     if (!isServiceReady) {
-        return Promise.resolve({});
+        return {};
     }
 
     var tmp = [];
@@ -100,20 +158,15 @@ function getByPhones(phones) {
     }
 
     var sql = "SELECT * FROM contact WHERE phone IN ("+tmp.join(",")+")";
-    console.log('ready now');
-    return getDb().executeSql(sql, phones).then(([results]) => {
-        if (results == undefined || results.rows == undefined) {
-            return {};
-        }
 
-        let ret = {};
-        for (let i=0;i<results.rows.length; i++) {
-            let contact = results.rows.item(i);
-            ret[contact.phone] = contact;
-        }
+    let results = await executeSql(sql, phones)
 
-        return ret;
-    });
+    let ret = {};
+    for (let contact of results) {
+      ret[contact.phone] = contact;
+    }
+
+    return ret;
 }
 
 module.exports = {
@@ -121,6 +174,6 @@ module.exports = {
     create: createContact,
     list: list,
     getByPhones: getByPhones,
-    getContactType: getContactType
-
+    getContactType: getContactType,
+    getTagIds: getTagIds
 };

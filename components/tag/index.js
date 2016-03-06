@@ -23,13 +23,23 @@ class TagAutoComplete extends Component {
 
     var typeMap = {};
     props.data.forEach(type => typeMap[type.id] = type);
+
+    let selectedTypes = props.selected;
+    if (!selectedTypes) {
+      selectedTypes = [];
+    }
+
     this.state = {
       tag: "",
-      selectedTypes: [],
+      selectedTypes: selectedTypes,
       types: props.data,
       typeMap: typeMap,
       matchedTags: [],
     };
+  }
+
+  selectedTags() {
+    return this.state.selectedTypes
   }
 
   render() {

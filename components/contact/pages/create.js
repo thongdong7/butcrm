@@ -36,6 +36,7 @@ class ContactCreate extends DefaultPage {
       name: null,
       phone: null,
       note: null,
+      tag_ids: []
     }
 
     let route = this.props.route;
@@ -43,6 +44,12 @@ class ContactCreate extends DefaultPage {
       for (let f in route.contact) {
         state[f] = route.contact[f];
       }
+    }
+
+    if (state.contact_id) {
+      state.loadingTag = true;
+    } else {
+      state.loadingTag = false;
     }
 
     this.state = state;
@@ -76,7 +83,13 @@ class ContactCreate extends DefaultPage {
   async _loadData() {
     console.log('load data');
     let contactTypes = await contactService.getContactType();
-    console.log('contact types', contactTypes);
+
+    if (this.state.contact_id) {
+
+      // Load tag_ids
+      let tagIds = await contactService.getTagIds(this.state.contact_id);
+      this.setState({tag_ids: tagIds, loadingTag: false});
+    }
 
     this.types = contactTypes;
   }
@@ -86,30 +99,40 @@ class ContactCreate extends DefaultPage {
   }
 
   renderContent() {
+    let tagAutoComplete;
+    if (this.state.loadingTag) {
+      tagAutoComplete = <Text>Loading tags...</Text>;
+    } else {
+      tagAutoComplete = <TagAutoComplete ref="tag" data={this.types} selected={this.state.tag_ids}/>
+    }
     return (
-      <View>
-        <View style={{padding: 15, flex: 1}}>
-        <TextInput
-          autoCapitalize='words'
-          placeholder='Name'
-          onChangeText={(text) => this.setState({name: text})}
-          value={this.state.name}
-        />
-        <TextInput
-          placeholder='Phone'
-          keyboardType='numeric'
-          onChangeText={(text) => this.setState({phone: text})}
-          value={this.state.phone}
-        />
-        <TagAutoComplete data={this.types} />
-        <TextInput
-          placeholder='Note'
-          multiline={true}
-          numberOfLines={3}
-          onChangeText={(text) => this.setState({note: text})}
-          value={this.state.note}
-        />
-        </View>
+      <View style={{flex: 1}}>
+      <ScrollView style={{flex: 1}}
+          automaticallyAdjustContentInsets={false}>
+          <View style={{padding: 15, flex: 1}}>
+          <TextInput
+            autoCapitalize='words'
+            placeholder='Name'
+            onChangeText={(text) => this.setState({name: text})}
+            value={this.state.name}
+          />
+          <TextInput
+            placeholder='Phone'
+            keyboardType='numeric'
+            onChangeText={(text) => this.setState({phone: text})}
+            value={this.state.phone}
+          />
+          {tagAutoComplete}
+          <TextInput
+            placeholder='Note'
+            multiline={true}
+            numberOfLines={3}
+            onChangeText={(text) => this.setState({note: text})}
+            value={this.state.note}
+          />
+          </View>
+          <View style={{paddingBottom: 300}} />
+      </ScrollView>
       </View>
     );
   }
@@ -128,7 +151,18 @@ class ContactCreate extends DefaultPage {
   async save() {
     if (this.state.name) {
       dismissKeyboard();
-      await contactService.create(this.state);
+      let contact = {};
+      for (let f in this.state) {
+        if (f == "tag_ids" || f == "loadingTag") {
+          continue;
+        }
+
+        contact[f] = this.state[f];
+      }
+
+      console.log(this.refs.tag.selectedTags())
+
+      await contactService.create(contact, this.refs.tag.selectedTags());
 
       let msg;
       if (this.state.contact_id) {
