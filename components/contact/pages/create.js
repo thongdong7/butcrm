@@ -107,32 +107,32 @@ class ContactCreate extends DefaultPage {
     }
     return (
       <View style={{flex: 1}}>
-      <ScrollView style={{flex: 1}}
-          automaticallyAdjustContentInsets={false}>
-          <View style={{padding: 15, flex: 1}}>
-          <TextInput
-            autoCapitalize='words'
-            placeholder='Name'
-            onChangeText={(text) => this.setState({name: text})}
-            value={this.state.name}
-          />
-          <TextInput
-            placeholder='Phone'
-            keyboardType='numeric'
-            onChangeText={(text) => this.setState({phone: text})}
-            value={this.state.phone}
-          />
-          {tagAutoComplete}
-          <TextInput
-            placeholder='Note'
-            multiline={true}
-            numberOfLines={3}
-            onChangeText={(text) => this.setState({note: text})}
-            value={this.state.note}
-          />
-          </View>
-          <View style={{paddingBottom: 300}} />
-      </ScrollView>
+        <ScrollView style={{flex: 1}}
+            automaticallyAdjustContentInsets={false}>
+            <View style={{padding: 15, flex: 1}}>
+            <TextInput
+              autoCapitalize='words'
+              placeholder='Name'
+              onChangeText={(text) => this.setState({name: text})}
+              value={this.state.name}
+            />
+            <TextInput
+              placeholder='Phone'
+              keyboardType='numeric'
+              onChangeText={(text) => this.setState({phone: text})}
+              value={this.state.phone}
+            />
+            {tagAutoComplete}
+            <TextInput
+              placeholder='Note'
+              multiline={true}
+              numberOfLines={3}
+              onChangeText={(text) => this.setState({note: text})}
+              value={this.state.note}
+            />
+            </View>
+            <View style={{paddingBottom: 300}} />
+        </ScrollView>
       </View>
     );
   }
@@ -159,8 +159,6 @@ class ContactCreate extends DefaultPage {
 
         contact[f] = this.state[f];
       }
-
-      console.log(this.refs.tag.selectedTags())
 
       await contactService.create(contact, this.refs.tag.selectedTags());
 

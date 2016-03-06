@@ -63,6 +63,8 @@ var routes = {
   }
 }
 
+var dismissKeyboard = require('dismissKeyboard');
+
 class ButCRMApp extends React.Component {
   closeControlPanel() {
     this.refs.drawer.close()
@@ -74,6 +76,9 @@ class ButCRMApp extends React.Component {
 
   render() {
     console.log('render app');
+
+    dismissKeyboard();
+
     var initialRoute = {name: 'contact.list'};
     let title;
     if (this.state && this.state.title) {
