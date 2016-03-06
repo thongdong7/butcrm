@@ -77,6 +77,8 @@ class ButCRMApp extends React.Component {
   render() {
     console.log('render app');
 
+    // Don't know why the keyboard is showed when application started,
+    // Workaround: call dismissKeyboard
     dismissKeyboard();
 
     var initialRoute = {name: 'contact.list'};
