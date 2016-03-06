@@ -1,14 +1,15 @@
 'use strict';
 
-var React = require('react-native');
-var {
-  StyleSheet,
-  Text,
-  ToolbarAndroid,
-  View,
-} = React;
+// var React = require('react-native');
+// var {
+//   StyleSheet,
+//   Text,
+//   ToolbarAndroid,
+//   View,
+// } = React;
+import React, {Component, StyleSheet, Text, ToolbarAndroid, View} from 'react-native'
 
-class DefaultPage extends React.Component {
+export default class DefaultPage extends Component {
   render() {
 //    console.log('default render');
 
@@ -16,7 +17,7 @@ class DefaultPage extends React.Component {
       <View style={styles.container}>
         <ToolbarAndroid
           ref="toolbar"
-          navIcon={require('../../../images/menu.png')}
+          navIcon={require('../images/menu.png')}
           onIconClicked={this._onNavIconClicked.bind(this)}
           actions={this.getActions()}
           onActionSelected={this.onActionSelected.bind(this)}
@@ -75,4 +76,4 @@ var styles = StyleSheet.create({
   },
 });
 
-module.exports = DefaultPage;
+// module.exports = DefaultPage;

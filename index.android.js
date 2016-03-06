@@ -1,20 +1,13 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
 'use strict';
 
-var ContactCreate = require('./components/contact/pages/create.js');
-var ContactList = require('./components/contact/pages/list.js');
-var CallHistory = require('./components/contact/pages/history.js');
-var Hello = require('./components/contact/pages/hello.js');
-var World = require('./components/contact/pages/world.js');
-var NavigationBar = require('./components/drawer/pages/index.js');
-var DefaultPage = require('./components/common/pages/default.js');
+import ContactCreate from './components/Contact/Create';
+import ContactList from './components/Contact/List';
+import CallHistory from './components/Contact/History';
 
-var BackButton = require('./components/BackButton');
+import NavigationBar from './components/Drawer';
+import DefaultPage from './components/BasicPage';
 
-var Drawer = require('react-native-drawer')
+import Drawer from 'react-native-drawer'
 
 var React = require('react-native');
 var {
@@ -36,14 +29,6 @@ BackAndroid.addEventListener('hardwareBackPress', () => {
 });
 
 var routes = {
-  'hello': {
-    title: 'Hello',
-    component: Hello
-  },
-  'world': {
-    title: 'World',
-    component: World
-  },
   'contact.create': {
     title: 'Create contact',
     component: ContactCreate

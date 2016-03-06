@@ -1,12 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
-'use strict';
-
-var React = require('react-native');
-var {
-  AppRegistry,
+import React, {
   Image,
   ListView,
   PullToRefreshViewAndroid,
@@ -15,16 +7,13 @@ var {
   ToolbarAndroid,
   TouchableHighlight,
   View,
-} = React;
+} from 'react-native'
 
-var emitter = require('../../event');
+import emitter from '../event'
+import contactService from './service'
+import DefaultPage from '../BasicPage';
 
-var contactService = require('../service');
-var DefaultPage = require('../../common/pages/default.js');
-//var ContactCreate = require('./create.js');
-// var Hello = require('./hello.js');
-
-class ContactList extends DefaultPage {
+export default class ContactList extends DefaultPage {
   constructor(props) {
     super(props);
 
@@ -115,12 +104,13 @@ class ContactList extends DefaultPage {
   }
 
   gotoContactCreate(contact) {
-    console.log(`contact clicked `, contact);
+    console.log('contact clicked ', contact);
+    console.log('navigator');
     this.props.navigator.push({
-        name: 'contact.create',
-        contact: contact,
-        callback: this._fetchData.bind(this)
-      });
+      name: 'contact.create',
+      contact: contact,
+      callback: this._fetchData.bind(this)
+    });
   }
 
   onActionSelected(position) {
@@ -170,5 +160,3 @@ var styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
-module.exports = ContactList;

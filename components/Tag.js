@@ -17,7 +17,7 @@ var styles = StyleSheet.create({
   }
 });
 
-class TagAutoComplete extends Component {
+export default class TagAutoComplete extends Component {
   constructor(props) {
     super(props);
 
@@ -117,5 +117,3 @@ class TagAutoComplete extends Component {
     this.setState({tag: text, matchedTags: matchedTags})
   }
 }
-
-module.exports = TagAutoComplete;

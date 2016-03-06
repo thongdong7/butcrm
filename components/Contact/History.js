@@ -1,8 +1,4 @@
-'use strict';
-
-var React = require('react-native');
-var {
-  AppRegistry,
+import React, {
   Image,
   ListView,
   PullToRefreshViewAndroid,
@@ -11,15 +7,15 @@ var {
   ToastAndroid,
   TouchableHighlight,
   View,
-} = React;
+} from 'react-native'
 
-var emitter = require('../../event');
+import emitter from '../event'
 
-var CallHistoryAndroid = require('../../CallHistoryAndroid');
-var contactService = require('../service');
-var moment = require('moment');
+import CallHistoryAndroid from '../CallHistoryAndroid'
+import contactService from './service'
+import moment from 'moment'
 
-var DefaultPage = require('../../common/pages/default.js');
+import DefaultPage from '../BasicPage'
 
 var styles = StyleSheet.create({
   container: {
@@ -60,7 +56,7 @@ var styles = StyleSheet.create({
 // Only show last 20 calls
 var limit = 20;
 
-class CallHistory extends DefaultPage {
+export default class CallHistory extends DefaultPage {
   constructor(props) {
     super(props);
     this.state = {
@@ -190,5 +186,3 @@ class CallHistory extends DefaultPage {
     })
   }
 }
-
-module.exports = CallHistory;

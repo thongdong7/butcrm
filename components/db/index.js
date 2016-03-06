@@ -1,12 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
-'use strict';
-
-var React = require('react-native');
-var {
-  AppRegistry,
+import React, {
   Image,
   ListView,
   StyleSheet,
@@ -15,11 +7,12 @@ var {
   TextInput,
   ToolbarAndroid,
   View,
-} = React;
+} from 'react-native'
 
-var emitter = require('../event');
+import emitter from '../event'
 
-var SQLite = require('react-native-sqlite-storage');
+import SQLite from 'react-native-sqlite-storage'
+
 SQLite.DEBUG(false);
 SQLite.enablePromise(true);
 var database_name = "Test1.db";
@@ -147,13 +140,10 @@ async function migrate(startVersion) {
     for (let i=startVersion;i<schema.length;i++) {
         let j = i;
         try {
-            console.log("executeSql", schema[j]);
-
             await db.executeSql(schema[j]);
         } catch (err) {
             console.log(err)
         }
-
     }
 
     console.log("Migrate completed. Know update the version");

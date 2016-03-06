@@ -1,8 +1,4 @@
-'use strict';
-
-var React = require('react-native');
-var {
-  AppRegistry,
+import React, {
   Image,
   ListView,
   StyleSheet,
@@ -12,13 +8,13 @@ var {
   TextInput,
   ToolbarAndroid,
   View,
-} = React;
+} from 'react-native'
 
-var ContactList = require('./list');
-var dismissKeyboard = require('dismissKeyboard');
-var contactService = require("../service");
-var DefaultPage = require('../../common/pages/default.js');
-import TagAutoComplete from '../../tag';
+import ContactList from './List';
+import dismissKeyboard from 'dismissKeyboard';
+import contactService from "./service";
+import DefaultPage from '../BasicPage';
+import TagAutoComplete from '../Tag';
 
 var styles = StyleSheet.create({
   toolbar: {
@@ -27,7 +23,7 @@ var styles = StyleSheet.create({
   },
 });
 
-class ContactCreate extends DefaultPage {
+export default class ContactCreate extends DefaultPage {
   constructor(props) {
     super(props);
 
@@ -174,5 +170,3 @@ class ContactCreate extends DefaultPage {
     }
   }
 }
-
-module.exports = ContactCreate;
