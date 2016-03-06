@@ -10,7 +10,7 @@ import React, {
 } from 'react-native'
 
 import Emitter from '../Emitter'
-import contactService from './service'
+import ContactService from './Service'
 import DefaultPage from '../BasicPage';
 
 export default class ContactList extends DefaultPage {
@@ -44,7 +44,7 @@ export default class ContactList extends DefaultPage {
     // console.log('fetchData1');
     this.setState({isRefreshing: true})
 
-    let contacts = await contactService.list();
+    let contacts = await ContactService.list();
 
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(contacts),

@@ -12,7 +12,7 @@ import React, {
 
 import ContactList from './List';
 import dismissKeyboard from 'dismissKeyboard';
-import contactService from "./service";
+import ContactService from "./Service";
 import DefaultPage from '../BasicPage';
 import TagAutoComplete from '../Tag';
 
@@ -77,12 +77,12 @@ export default class ContactCreate extends DefaultPage {
   }
 
   async _loadData() {
-    let contactTypes = await contactService.getContactType();
+    let contactTypes = await ContactService.getContactType();
 
     if (this.state.contact_id) {
 
       // Load tag_ids
-      let tagIds = await contactService.getTagIds(this.state.contact_id);
+      let tagIds = await ContactService.getTagIds(this.state.contact_id);
       this.setState({tag_ids: tagIds, loadingTag: false});
     }
 
@@ -155,7 +155,7 @@ export default class ContactCreate extends DefaultPage {
         contact[f] = this.state[f];
       }
 
-      await contactService.create(contact, this.refs.tag.selectedTags());
+      await ContactService.create(contact, this.refs.tag.selectedTags());
 
       let msg;
       if (this.state.contact_id) {

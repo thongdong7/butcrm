@@ -12,7 +12,7 @@ import React, {
 import Emitter from '../Emitter'
 
 import CallHistoryAndroid from '../CallHistoryAndroid'
-import contactService from './service'
+import ContactService from './Service'
 import moment from 'moment'
 
 import DefaultPage from '../BasicPage'
@@ -83,7 +83,7 @@ export default class CallHistory extends DefaultPage {
     this.setState({
       isRefreshing: true
     })
-    if (!contactService.isReady()) {
+    if (!ContactService.isReady()) {
       // console.log('contact service is not ready');
       return;
     }
@@ -97,7 +97,7 @@ export default class CallHistory extends DefaultPage {
         phones.push(data[i].phone);
       }
 
-      contactService.getByPhones(phones).then((phoneMap) => {
+      ContactService.getByPhones(phones).then((phoneMap) => {
        // console.log('phone map2')
         for (let i in data) {
           let phone = data[i].phone;
