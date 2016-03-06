@@ -81,7 +81,6 @@ class ContactCreate extends DefaultPage {
   }
 
   async _loadData() {
-    console.log('load data');
     let contactTypes = await contactService.getContactType();
 
     if (this.state.contact_id) {
@@ -108,7 +107,7 @@ class ContactCreate extends DefaultPage {
     return (
       <View style={{flex: 1}}>
         <ScrollView style={{flex: 1}}
-            automaticallyAdjustContentInsets={false}>
+            keyboardShouldPersistTaps={true}>
             <View style={{padding: 15, flex: 1}}>
             <TextInput
               autoCapitalize='words'
